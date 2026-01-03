@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#050510">
+    <title>Date or Dare Pro</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Added Great Vibes for the neon script look -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Outfit:wght@300;400;600;800&family=Heebo:wght@300;400;700;900&display=swap"
+        rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Heebo', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                        neon: ['Great Vibes', 'cursive'],
+                    },
+                    colors: {
+                        brand: {
+                            gold: '#FFD700',
+                            goldDim: '#BFA100',
+                            dark: '#050505',
+                            card: '#121212',
+                            accent: '#F59E0B',
+                            purple: '#2d0a4e', // Deep purple
+                            neonBlue: '#00f3ff',
+                            neonPink: '#ff00ff',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'blob': 'blob 10s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050510;
+            overscroll-behavior: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Premium Glass Effect */
+        .glass-panel {
+            background: rgba(20, 20, 35, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.05) 50%, transparent 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .glass-btn:hover::after {
+            transform: translateX(100%);
+        }
+
+        .glass-btn:active {
+            transform: scale(0.96);
+            border-color: #00f3ff;
+            background: rgba(0, 243, 255, 0.1);
+        }
+
+        .card-3d {
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .page-enter {
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(60px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #FFD700 0%, #F59E0B 50%, #BFA100 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Neon Typography */
+        .text-neon {
+            font-family: 'Great Vibes', cursive;
+            text-shadow:
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 20px #00f3ff,
+                0 0 40px #00f3ff,
+                0 0 80px #00f3ff;
+        }
+
+        .text-neon-pink {
+            font-family: 'Great Vibes', cursive;
+            text-shadow:
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 20px #ff00ff,
+                0 0 40px #ff00ff,
+                0 0 80px #ff00ff;
+        }
+
+        /* 3D Dice Enhancements */
+        .dice-face {
+            backface-visibility: hidden;
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.2);
+            background: rgba(20, 20, 20, 0.85);
+            /* Darker base for contrast */
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+
+        /* Sparkle Particle Styling */
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            background: white;
+            border-radius: 50%;
+            mix-blend-mode: screen;
+            animation: twinkle 1s ease-in-out forwards;
+        }
+
+        @keyframes twinkle {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1) rotate(180deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .magic-glow {
+            animation: magicPulse 2s infinite alternate;
+        }
+
+        @keyframes magicPulse {
+            from {
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+            }
+
+            to {
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.6), 0 0 60px rgba(255, 215, 0, 0.3);
+            }
+        }
+    </style>
+</head>
+
+<body class="h-screen w-screen text-white overflow-hidden selection:bg-brand-gold selection:text-black font-sans">
+
+    <!-- Ambient Background -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden">
+        <!-- Main Dark Gradient -->
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,#2d0a4e,000)]"></div>
+
+        <!-- Neon Orbs -->
+        <div
+            class="absolute top-[10%] -left-[10%] w-[60vw] h-[60vw] bg-brand-neonBlue/10 rounded-full blur-[100px] animate-pulse-slow">
+        </div>
+        <div
+            class="absolute top-[40%] -right-[10%] w-[50vw] h-[50vw] bg-brand-neonPink/10 rounded-full blur-[100px] animate-pulse-slow">
+        </div>
+
+        <!-- Texture -->
+        <div
+            class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-overlay">
+        </div>
+    </div>
+
+    <!-- Home Screen -->
+    <div id="home-screen" class="w-full h-full flex flex-col p-6 page-enter relative z-10">
+
+        <!-- Hero Section -->
+        <div
+            class="flex flex-col items-center justify-center mt-12 mb-12 transform hover:scale-105 transition-transform duration-500 cursor-default">
+            <h1 class="text-7xl text-center leading-[0.8]">
+                <span class="font-black text-brand-neonBlue drop-shadow-[0_0_15px_rgba(0,243,255,0.8)]">דייט</span>
+                <span class="font-sans text-2xl tracking-[0.6em] text-white/50 block my-2 font-light">או</span>
+                <span class="font-black text-brand-neonPink drop-shadow-[0_0_15px_rgba(255,0,255,0.8)]">חובה</span>
+            </h1>
+        </div>
+
+        <!-- Vibe Pills -->
+        <div class="flex justify-center mb-10">
+            <div class="flex p-1 bg-white/5 rounded-full border border-white/10 backdrop-blur-md">
+                <button onclick="setVibe('date', this)"
+                    class="vibe-btn px-6 py-2 rounded-full text-xs font-bold text-black bg-brand-neonBlue shadow-[0_0_15px_rgba(0,243,255,0.4)] transition-all">
+                    Date
+                </button>
+                <button onclick="setVibe('partners', this)"
+                    class="vibe-btn px-6 py-2 rounded-full text-xs font-medium text-white/50 hover:text-white transition-all">
+                    Couple
+                </button>
+                <button onclick="setVibe('spicy', this)"
+                    class="vibe-btn px-6 py-2 rounded-full text-xs font-medium text-white/50 hover:text-white transition-all">
+                    Spicy
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Menu -->
+        <div class="flex flex-col gap-4 flex-1 overflow-y-auto pb-8 hide-scrollbar max-w-sm mx-auto w-full">
+
+            <!-- Cards (Hero Item) -->
+            <button onclick="openGame('cards')"
+                class="glass-btn w-full p-6 rounded-[2rem] flex items-center justify-between group border-white/5 hover:border-brand-neonBlue/50">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-brand-neonBlue/10 flex items-center justify-center text-brand-neonBlue group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-layer-group text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <h3 class="text-lg font-bold text-white tracking-wide">Card Deck</h3>
+                        <p class="text-xs text-white/40">Classic Game</p>
+                    </div>
+                </div>
+                <i
+                    class="fa-solid fa-chevron-right text-white/20 group-hover:text-brand-neonBlue transition-colors"></i>
+            </button>
+
+            <!-- Grid Items -->
+            <div class="grid grid-cols-3 gap-3">
+                <button onclick="openGame('thisthat')"
+                    class="glass-btn aspect-square rounded-[1.5rem] flex flex-col items-center justify-center gap-2 group hover:border-brand-neonPink/50">
+                    <i
+                        class="fa-solid fa-scale-balanced text-2xl text-brand-neonPink group-hover:scale-110 transition-transform"></i>
+                    <span class="text-[10px] font-bold text-white/80">This/That</span>
+                </button>
+
+                <button onclick="openGame('dice')"
+                    class="glass-btn aspect-square rounded-[1.5rem] flex flex-col items-center justify-center gap-2 group hover:border-brand-gold/50">
+                    <i class="fa-solid fa-dice text-2xl text-brand-gold group-hover:scale-110 transition-transform"></i>
+                    <span class="text-[10px] font-bold text-white/80">Dice</span>
+                </button>
+
+                <button onclick="openGame('timer')"
+                    class="glass-btn aspect-square rounded-[1.5rem] flex flex-col items-center justify-center gap-2 group hover:border-purple-400/50">
+                    <i
+                        class="fa-solid fa-hourglass-half text-2xl text-purple-400 group-hover:scale-110 transition-transform"></i>
+                    <span class="text-[10px] font-bold text-white/80">Timer</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Cards Screen -->
+    <div id="cards-screen"
+        class="fixed inset-0 bg-black/95 hidden flex-col items-center justify-center z-50 backdrop-blur-xl">
+        <button onclick="goHome()"
+            class="absolute top-8 left-6 w-12 h-12 rounded-full glass-btn flex items-center justify-center text-white z-50 hover:bg-white/10">
+            <i class="fa-solid fa-arrow-left text-lg"></i>
+        </button>
+
+        <div id="card-scene"
+            class="relative w-full h-full flex items-center justify-center perspective-[1200px] overflow-hidden">
+        </div>
+    </div>
+
+    <!-- This That Screen -->
+    <div id="thisthat-screen" class="fixed inset-0 bg-black hidden flex-col z-50">
+        <button onclick="goHome()"
+            class="absolute top-8 left-6 w-12 h-12 rounded-full glass-btn flex items-center justify-center text-white z-50 bg-black/50 backdrop-blur-md border-0">
+            <i class="fa-solid fa-arrow-left text-lg"></i>
+        </button>
+
+        <div onclick="nextChoice()" id="opt1-bg"
+            class="flex-1 relative bg-cover bg-center flex items-center justify-center group cursor-pointer overflow-hidden">
+            <div
+                class="absolute inset-0 bg-black/60 group-hover:bg-black/40 group-active:backdrop-blur-none transition-all duration-500">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/80 to-transparent opacity-80"></div>
+            <h2 id="opt1-text"
+                class="relative z-10 text-4xl font-black uppercase text-center drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)] px-6 transform group-hover:scale-105 transition-transform duration-500">
+                Loading...</h2>
+        </div>
+
+        <div class="h-0 flex items-center justify-center z-10 relative">
+            <div
+                class="w-16 h-16 rounded-full bg-brand-gold flex items-center justify-center text-black font-black text-lg border-[6px] border-[#050505] shadow-[0_0_30px_rgba(255,215,0,0.4)] absolute transform -translate-y-1/2">
+                VS</div>
+        </div>
+
+        <div onclick="nextChoice()" id="opt2-bg"
+            class="flex-1 relative bg-cover bg-center flex items-center justify-center group cursor-pointer overflow-hidden">
+            <div
+                class="absolute inset-0 bg-black/60 group-hover:bg-black/40 group-active:backdrop-blur-none transition-all duration-500">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-80"></div>
+            <h2 id="opt2-text"
+                class="relative z-10 text-4xl font-black uppercase text-center drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)] px-6 transform group-hover:scale-105 transition-transform duration-500">
+                Loading...</h2>
+        </div>
+    </div>
+
+    <!-- Dice Screen -->
+    <div id="dice-screen"
+        class="fixed inset-0 bg-black/95 hidden flex-col items-center justify-center z-50 p-6 backdrop-blur-xl">
+        <button onclick="goHome()"
+            class="absolute top-8 left-6 w-12 h-12 rounded-full glass-btn flex items-center justify-center text-white z-50">
+            <i class="fa-solid fa-arrow-left text-lg"></i>
+        </button>
+
+        <div class="w-64 h-64 relative mb-20" style="perspective: 1000px;">
+            <div id="cube" class="w-full h-full relative"
+                style="transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+            </div>
+        </div>
+
+        <button onclick="rollDice()"
+            class="w-full max-w-xs py-5 bg-brand-gold text-black font-black text-xl rounded-2xl shadow-[0_0_40px_rgba(255,215,0,0.3)] active:scale-95 transition-all hover:bg-[#ffe033]">
+            הטל קובייה
+        </button>
+
+        <div id="dice-result"
+            class="mt-8 text-2xl font-bold text-center h-20 flex items-center justify-center opacity-0 transition-opacity text-white">
+            ...
+        </div>
+    </div>
+
+    <!-- Timer Screen (New) -->
+    <div id="timer-screen" class="fixed inset-0 bg-black/95 hidden flex-col items-center justify-center z-50 p-6">
+        <button onclick="goHome()"
+            class="absolute top-8 left-6 w-12 h-12 rounded-full glass-btn flex items-center justify-center text-white z-50">
+            <i class="fa-solid fa-arrow-left text-lg"></i>
+        </button>
+
+        <div class="relative w-64 h-64 flex items-center justify-center mb-12">
+            <!-- Progress Ring Background -->
+            <svg class="absolute inset-0 w-full h-full rotate-[-90deg]">
+                <circle cx="50%" cy="50%" r="48%" fill="transparent" stroke="rgba(255,255,255,0.1)" stroke-width="8">
+                </circle>
+                <circle id="timer-ring" cx="50%" cy="50%" r="48%" fill="transparent" stroke="#FFD700" stroke-width="8"
+                    stroke-dasharray="0" stroke-linecap="round"
+                    class="transition-all duration-1000 ease-linear shadow-[0_0_20px_rgba(255,215,0,0.5)]"></circle>
+            </svg>
+            <div id="timer-display" class="text-7xl font-black font-display gradient-text">30</div>
+        </div>
+
+        <div class="flex gap-4 w-full max-w-xs">
+            <button onclick="startTimer()"
+                class="flex-1 py-4 bg-brand-gold text-black font-bold rounded-xl shadow-[0_0_20px_rgba(255,215,0,0.2)] active:scale-95 transition-transform">
+                התחל
+            </button>
+            <button onclick="resetTimer()" class="px-6 py-4 glass-btn rounded-xl font-bold text-white active:scale-95">
+                איפוס
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- Game State ---
+        let currentVibe = 'date';
+        let timerInterval;
+        let timeLeft = 30;
+
+        const missions = {
+            'date': ["מה הדבר הראשון שחשבת עליי?", "ספרו פדיחה מהילדות", "מה הדייט הכי גרוע שהיה לכם?", "תנו לי מחמאה אחת כנה"],
+            'partners': ["מתי הרגשת שאני 'האחד/ת'?", "זיכרון משותף אהוב?", "מה החלום הבא שלנו?", "דבר אחד שאת/ה מעריך בי"],
+            'spicy': ["נשיקה בצוואר", "מסאז' של דקה", "להוריד פריט לבוש", "ללחוש משהו סקסי באוזן"],
+            'surprise': ["🎰 לוטו מגע: ליטוף בגב", "🎰 לוטו מגע: נשיקה בשפתיים", "🎰 לוטו מגע: מסאז' בכפות רגליים"]
+        };
+
+        const choices = [
+            { t1: "מלון יוקרה", img1: "https://images.unsplash.com/photo-1566073771259-6a8506099945", t2: "אוהל בטבע", img2: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4" },
+            { t1: "סושי", img1: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c", t2: "פיצה", img2: "https://images.unsplash.com/photo-1513104890138-7c749659a591" },
+            { t1: "כלבים", img1: "https://images.unsplash.com/photo-1543466835-00a7907e9de1", t2: "חתולים", img2: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba" }
+        ];
+
+        // --- Core Functions ---
+
+        function setVibe(vibe, btn) {
+            currentVibe = vibe;
+            document.querySelectorAll('.vibe-btn').forEach(b => {
+                b.className = 'vibe-btn px-6 py-2 rounded-full text-xs font-medium text-white/50 hover:text-white transition-all';
+                // Remove internal span if exists to reset
+                b.innerHTML = b.textContent;
+            });
+
+            // Active State
+            btn.className = 'vibe-btn px-6 py-2 rounded-full text-xs font-bold text-black bg-brand-neonBlue shadow-[0_0_15px_rgba(0,243,255,0.4)] transition-all';
+        }
+
+        function openGame(game) {
+            document.getElementById('home-screen').classList.add('hidden');
+            const screen = document.getElementById(game + '-screen');
+            if (screen) {
+                screen.classList.remove('hidden');
+                screen.classList.add('flex');
+
+                if (game === 'cards') initCards();
+                if (game === 'thisthat') nextChoice();
+                if (game === 'dice') initDice();
+                if (game === 'timer') resetTimer();
+            }
+        }
+
+        function goHome() {
+            document.querySelectorAll('[id$="-screen"]').forEach(s => {
+                if (s.id !== 'home-screen') {
+                    s.classList.add('hidden');
+                    s.classList.remove('flex');
+                }
+            });
+            document.getElementById('home-screen').classList.remove('hidden');
+
+            // Cleanup
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        // --- Cards Logic ---
+        function initCards() {
+            const container = document.getElementById('card-scene');
+            container.innerHTML = '';
+            createCard();
+        }
+
+        function createCard() {
+            const container = document.getElementById('card-scene');
+            const card = document.createElement('div');
+
+            const isSurprise = Math.random() < 0.15;
+            const text = isSurprise ?
+                missions['surprise'][Math.floor(Math.random() * missions['surprise'].length)] :
+                missions[currentVibe][Math.floor(Math.random() * missions[currentVibe].length)];
+
+            const borderColor = isSurprise ? 'border-pink-500' : 'border-brand-gold';
+            const shadowColor = isSurprise ? 'shadow-pink-500/40' : 'shadow-brand-gold/30';
+            const textColor = isSurprise ? 'text-pink-100' : 'text-amber-100';
+
+            card.className = `absolute w-[80%] max-w-sm aspect-[2/3] rounded-[2rem] bg-[#1a1a1a]/90 backdrop-blur-xl border border-white/10 flex flex-col items-center justify-center p-8 text-center shadow-2xl ${shadowColor} cursor-pointer card-3d`;
+
+            card.innerHTML = `
+                <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent rounded-[2rem]"></div>
+                <div class="absolute inset-0 border-2 ${borderColor} opacity-50 rounded-[2rem]"></div>
+                
+                <div class="relative z-10 flex flex-col items-center h-full justify-center">
+                    <div class="text-xs font-black tracking-[0.4em] uppercase mb-6 text-white/30">${isSurprise ? 'JACKPOT' : currentVibe}</div>
+                    <h2 class="text-3xl font-bold leading-tight ${textColor} drop-shadow-lg">${text}</h2>
+                </div>
+                
+                <div class="absolute bottom-8 left-0 right-0 text-center">
+                    <div class="inline-block px-4 py-1 rounded-full bg-white/5 text-[10px] text-white/30 font-bold tracking-wider animate-pulse border border-white/5">TAP FOR NEXT</div>
+                </div>
+            `;
+
+            // Animation In
+            card.style.transform = 'translateY(100px) scale(0.9) rotateX(10deg)';
+            card.style.opacity = '0';
+            container.appendChild(card);
+
+            // Force reflow
+            void card.offsetWidth;
+
+            card.style.transform = 'translateY(0) scale(1) rotateX(0)';
+            card.style.opacity = '1';
+
+            card.onclick = () => {
+                // Fly out animation
+                const randomRotate = Math.random() * 20 - 10;
+                card.style.transform = `translate(120%, -20%) rotate(${20 + randomRotate}deg)`;
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.remove();
+                    createCard();
+                }, 400);
+            };
+        }
+
+        // --- This or That Logic ---
+        function nextChoice() {
+            const pair = choices[Math.floor(Math.random() * choices.length)];
+
+            const bg1 = document.getElementById('opt1-bg');
+            const bg2 = document.getElementById('opt2-bg');
+
+            // Preload images
+            const img1 = new Image(); img1.src = pair.img1;
+            const img2 = new Image(); img2.src = pair.img2;
+
+            bg1.style.backgroundImage = `url('${pair.img1}?w=600&q=80')`;
+            bg2.style.backgroundImage = `url('${pair.img2}?w=600&q=80')`;
+
+            const t1 = document.getElementById('opt1-text');
+            const t2 = document.getElementById('opt2-text');
+
+            // Text pop animation
+            t1.style.transform = 'scale(0.8)'; t1.style.opacity = '0';
+            t2.style.transform = 'scale(0.8)'; t2.style.opacity = '0';
+
+            setTimeout(() => {
+                t1.innerText = pair.t1;
+                t2.innerText = pair.t2;
+                t1.style.transform = 'scale(1)'; t1.style.opacity = '1';
+                t2.style.transform = 'scale(1)'; t2.style.opacity = '1';
+            }, 200);
+        }
+
+        // --- Dice Logic ---
+        function initDice() {
+            const cube = document.getElementById('cube');
+            const faces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
+            const content = ['?', 'אמת', 'חובה', 'אמת', 'חובה', '?'];
+            const transforms = [
+                'translateZ(128px)', 'rotateY(180deg) translateZ(128px)', 'rotateY(90deg) translateZ(128px)',
+                'rotateY(-90deg) translateZ(128px)', 'rotateX(90deg) translateZ(128px)', 'rotateX(-90deg) translateZ(128px)'
+            ];
+
+            let html = '';
+            faces.forEach((face, i) => {
+                html += `<div class="dice-face absolute w-full h-full border-4 border-brand-gold bg-[#111] flex items-center justify-center text-4xl font-black text-brand-gold rounded-3xl" style="transform: ${transforms[i]}">${content[i]}</div>`;
+            });
+            cube.innerHTML = html;
+        }
+
+        function rollDice() {
+            const cube = document.getElementById('cube');
+            const resultDiv = document.getElementById('dice-result');
+            resultDiv.style.opacity = '0';
+
+            // Magical Spin Animation
+            // We use a large number of rotations to make it feel fast and high-energy
+            const xRand = Math.floor(Math.random() * 4 + 8) * 90;
+            const yRand = Math.floor(Math.random() * 4 + 8) * 90;
+
+            // Add a "charging" effect scale down before launch
+            cube.style.transition = 'transform 0.2s ease-in';
+            cube.style.transform = `scale(0.8) rotateX(0deg) rotateY(0deg)`;
+
+            setTimeout(() => {
+                // The launch
+                cube.style.transition = 'transform 1.5s cubic-bezier(0.15, 0.9, 0.3, 1.2)'; // Elastic "Disney" ease
+                cube.style.transform = `scale(1) rotateX(${xRand}deg) rotateY(${yRand}deg)`;
+
+                // Spawn particles during flight
+                spawnSparkles(20);
+            }, 200);
+
+            setTimeout(() => {
+                const isTruth = Math.random() > 0.5;
+                const resultText = isTruth ?
+                    "<span class='text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]'>אמת:</span> " + missions['partners'][0] :
+                    "<span class='text-pink-500 drop-shadow-[0_0_15px_rgba(236,72,153,0.8)]'>חובה:</span> " + missions['spicy'][0];
+
+                resultDiv.innerHTML = resultText;
+                resultDiv.style.opacity = '1';
+
+                // Big burst of sparkles on result
+                spawnSparkles(50, true);
+
+                // Add magical glow/pulse to the cube briefly
+                cube.classList.add('magic-glow');
+                setTimeout(() => cube.classList.remove('magic-glow'), 2000);
+
+            }, 1700);
+        }
+
+        // --- Particle System ---
+        function spawnSparkles(amount, isBurst = false) {
+            const container = document.getElementById('dice-screen');
+            const rect = document.getElementById('cube').getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < amount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+
+                // Random properties
+                const size = Math.random() * 6 + 2; // 2px to 8px
+                const hue = Math.random() < 0.3 ? 50 : (Math.random() < 0.5 ? 280 : 320); // Gold, Purple, Pink
+
+                sparkle.style.width = `${size}px`;
+                sparkle.style.height = `${size}px`;
+                sparkle.style.backgroundColor = `hsl(${hue}, 100%, 80%)`;
+                sparkle.style.boxShadow = `0 0 ${size * 2}px hsl(${hue}, 100%, 60%)`;
+
+                // Starting position (center of cube)
+                sparkle.style.left = `${centerX}px`;
+                sparkle.style.top = `${centerY}px`;
+
+                container.appendChild(sparkle);
+
+                // Animate trajectory
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = isBurst ? (Math.random() * 200 + 100) : (Math.random() * 100 + 50);
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+
+                // Apply animation manually via Web Animations API for better control than simple CSS classes sometimes
+                const anim = sparkle.animate([
+                    { transform: `translate(-50%, -50%) scale(0)`, opacity: 0 },
+                    { transform: `translate(calc(-50% + ${tx * 0.2}px), calc(-50% + ${ty * 0.2}px)) scale(1)`, opacity: 1, offset: 0.2 },
+                    { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 1000 + Math.random() * 500,
+                    easing: 'cubic-bezier(0, .9, .57, 1)',
+                });
+
+                anim.onfinish = () => sparkle.remove();
+            }
+        }
+
+        // --- Timer Logic ---
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timeLeft = 30;
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    navigator.vibrate([200, 100, 200]);
+                    document.getElementById('timer-display').innerHTML = '<span class="text-red-500">BOOM</span>';
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timeLeft = 30;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const display = document.getElementById('timer-display');
+            const ring = document.getElementById('timer-ring');
+
+            display.innerText = timeLeft;
+
+            const total = 96 * Math.PI; // 2 * pi * r (r=48%)
+            const offset = total - ((timeLeft / 30) * total);
+
+            ring.style.strokeDasharray = `${total}`;
+            ring.style.strokeDashoffset = `${offset}`;
+        }
+
+    </script>
+</body>
+
+</html>
+```
