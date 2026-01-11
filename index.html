@@ -9,6 +9,12 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#050510">
 
+    <!-- Cache Busting -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="app-version" content="1.0.2">
+
     <title>דייט או חובה</title>
     <meta property="og:title" content="דייט או חובה">
     <meta property="og:description" content="המשחק ששבר לדייטים את הקרח">
@@ -156,8 +162,18 @@
                     שחק אותה <i class="fa-solid fa-heart text-white animate-pulse"></i>
                 </span>
             </button>
-            <p class="mt-6 text-white/30 text-xs tracking-widest uppercase">Premium Dating Experience Powered By G.T AI
-                Apps</p>
+            <div class="mt-8 flex flex-col items-center gap-2">
+                <p class="text-white/40 text-xs tracking-widest uppercase">Premium Dating Experience Powered By</p>
+                <a href="https://gilt73.github.io/GT-AI-Studio/" target="_blank"
+                    class="flex items-center gap-2 group opacity-60 hover:opacity-100 transition-opacity">
+                    <img src="GT_logo.png" alt="G.T AI Studio" class="h-6 w-auto object-contain">
+                    <span
+                        class="text-white/80 text-sm font-bold tracking-wider group-hover:text-brand-neonBlue transition-colors">G.T
+                        AI Studio</span>
+                </a>
+                <p class="text-white/20 text-[10px] mt-1 tracking-wider font-mono">v<span id="app-version">1.0.2</span>
+                    2026 &copy;</p>
+            </div>
         </div>
     </div>
 
@@ -209,10 +225,11 @@
                         class="text-[11px] font-bold text-white/60">Timer</span>
                 </button>
                 <button onclick="openGame('dice')"
-                    class="glass aspect-square rounded-[1.5rem] flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform hover:border-brand-amber/50">
-                    <i
-                        class="fa-solid fa-dice text-brand-amber text-xl drop-shadow-[0_0_8px_rgba(255,191,0,0.5)]"></i><span
-                        class="text-[11px] font-bold text-white/60">Dice</span>
+                    class="glass aspect-square rounded-[1.5rem] flex items-center justify-center active:scale-95 transition-transform hover:border-brand-amber/50 overflow-hidden p-0 relative group">
+                    <img src="CubeMaster.png" alt="Dice"
+                        class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <i class="fa-solid fa-play absolute bottom-3 right-3 text-white/80 text-xs drop-shadow-md"></i>
                 </button>
                 <button onclick="openGame('thisthat')"
                     class="glass aspect-square rounded-[1.5rem] flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform hover:border-brand-neonPink/50">
@@ -236,13 +253,20 @@
         <button onclick="goHome()"
             class="absolute top-10 right-6 w-12 h-12 glass rounded-full flex items-center justify-center hover:bg-white/10"><i
                 class="fa-solid fa-xmark text-white"></i></button>
-        <div class="w-48 h-48 relative mb-24" style="perspective:1000px">
-            <div id="cube" class="w-full h-full relative"
+        <!-- Magic Hand Hint -->
+        <div
+            class="pointer-events-none flex flex-col items-center justify-center gap-1 animate-bounce mb-6 z-10 relative">
+            <span
+                class="text-lg font-bold text-white tracking-widest dropped-shadow-md drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">סובב
+                אותי</span>
+            <i class="fa-solid fa-hand-point-down text-4xl text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]"></i>
+        </div>
+
+        <div class="w-48 h-48 relative mb-12 cursor-pointer group" style="perspective:1000px" onclick="rollDice()">
+            <div id="cube" class="w-full h-full relative transition-transform group-hover:scale-105"
                 style="transform-style:preserve-3d; transition:transform 2s cubic-bezier(0.15, 0.9, 0.3, 1.2)"></div>
         </div>
-        <button onclick="rollDice()"
-            class="w-full max-w-xs py-6 bg-brand-neonBlue text-black font-black text-xl rounded-2xl shadow-[0_0_25px_rgba(0,243,255,0.4)] active:scale-95 transition-transform">הטל
-            קובייה</button>
+
         <div id="dice-result"
             class="mt-8 glass p-6 rounded-2xl w-full max-w-xs text-center opacity-0 transition-opacity border border-brand-neonBlue/30">
             <p id="dice-text" class="text-lg font-bold text-brand-neonBlue drop-shadow-[0_0_5px_rgba(0,243,255,0.8)]">
@@ -993,17 +1017,17 @@
         function initDice() {
             const cube = document.getElementById('cube');
             const faces = [
-                { rot: 'rotateY(0deg)', text: 'גבר אמת', type: 'truth', gender: 'male' },
-                { rot: 'rotateY(180deg)', text: 'אשה אמת', type: 'truth', gender: 'female' },
-                { rot: 'rotateY(90deg)', text: 'גבר חובה', type: 'dare', gender: 'male' },
-                { rot: 'rotateY(-90deg)', text: 'אשה חובה', type: 'dare', gender: 'female' },
-                { rot: 'rotateX(90deg)', text: 'אמת', type: 'truth', gender: 'unisex' },
-                { rot: 'rotateX(-90deg)', text: 'חובה', type: 'dare', gender: 'unisex' }
+                { rot: 'rotateY(0deg)', img: 'deep_man.png', type: 'truth', gender: 'male' },
+                { rot: 'rotateY(180deg)', img: 'deep_woman.png', type: 'truth', gender: 'female' },
+                { rot: 'rotateY(90deg)', img: 'wild_man.png', type: 'dare', gender: 'male' },
+                { rot: 'rotateY(-90deg)', img: 'wild_woman.png', type: 'dare', gender: 'female' },
+                { rot: 'rotateX(90deg)', img: 'cheers_man.png', type: 'truth', gender: 'unisex' },
+                { rot: 'rotateX(-90deg)', img: 'cheers_woman.png', type: 'dare', gender: 'unisex' }
             ];
             cube.innerHTML = faces.map(f => `
-                <div class="dice-face absolute w-full h-full flex items-center justify-center text-center p-2 font-black rounded-3xl text-xl text-brand-neonBlue border border-brand-neonBlue/50 shadow-[0_0_15px_rgba(0,243,255,0.2) inset]" 
-                     style="transform:${f.rot} translateZ(96px); background: rgba(5,5,16,0.95);" 
-                     data-type="${f.type}" data-gender="${f.gender}">${f.text}</div>`).join('');
+                <div class="dice-face absolute w-full h-full flex items-center justify-center text-center rounded-3xl border border-brand-neonBlue/50 shadow-[0_0_15px_rgba(0,243,255,0.2)]" 
+                     style="transform:${f.rot} translateZ(96px); background: url('${f.img}') center/cover; overflow: hidden;" 
+                     data-type="${f.type}" data-gender="${f.gender}"></div>`).join('');
         }
 
         function rollDice() {
@@ -1011,7 +1035,21 @@
             const resText = document.getElementById('dice-text');
             const cube = document.getElementById('cube');
 
-            cube.style.transform = `rotateX(${Math.floor(Math.random() * 8 + 8) * 90}deg) rotateY(${Math.floor(Math.random() * 8 + 8) * 90}deg)`;
+            // Possible final rotations that keep images upright (multiples of 360)
+            const finalRotations = [
+                { x: 0, y: 0 },      // Front face (deep_man)
+                { x: 0, y: 180 },    // Back face (deep_woman)
+                { x: 0, y: 90 },     // Right face (wild_man)
+                { x: 0, y: -90 },    // Left face (wild_woman)
+                { x: 90, y: 0 },     // Top face (cheers_man)
+                { x: -90, y: 0 }     // Bottom face (cheers_woman)
+            ];
+
+            const chosen = finalRotations[Math.floor(Math.random() * finalRotations.length)];
+            const spinX = (Math.floor(Math.random() * 3 + 3) * 360) + chosen.x; // 3-5 full rotations + final position
+            const spinY = (Math.floor(Math.random() * 3 + 3) * 360) + chosen.y;
+
+            cube.style.transform = `rotateX(${spinX}deg) rotateY(${spinY}deg)`;
             resCard.style.opacity = '0';
 
             setTimeout(() => {
