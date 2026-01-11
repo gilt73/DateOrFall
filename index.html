@@ -9,11 +9,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#050510">
 
-    <!-- Cache Busting -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <meta name="app-version" content="1.0.2">
+    <!-- Smart Caching with Version Control -->
+    <meta http-equiv="Cache-Control" content="public, max-age=31536000">
+    <meta name="app-version" content="1.0.3">
 
     <title>דייט או חובה</title>
     <meta property="og:title" content="דייט או חובה">
@@ -22,6 +20,12 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon.png">
     <link rel="icon" type="image/png" href="icon.png">
+
+    <!-- Preconnect to CDNs for faster loading -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -171,7 +175,7 @@
                         class="text-white/80 text-sm font-bold tracking-wider group-hover:text-brand-neonBlue transition-colors">G.T
                         AI Studio</span>
                 </a>
-                <p class="text-white/20 text-[10px] mt-1 tracking-wider font-mono">v<span id="app-version">1.0.2</span>
+                <p class="text-white/20 text-[10px] mt-1 tracking-wider font-mono">v<span id="app-version">1.0.3</span>
                     2026 &copy;</p>
             </div>
         </div>
@@ -256,10 +260,10 @@
         <!-- Magic Hand Hint -->
         <div
             class="pointer-events-none flex flex-col items-center justify-center gap-1 animate-bounce mb-6 z-10 relative">
-            <span
-                class="text-lg font-bold text-white tracking-widest dropped-shadow-md drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">סובב
-                אותי</span>
-            <i class="fa-solid fa-hand-point-down text-4xl text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]"></i>
+            class="text-sm font-bold text-white tracking-widest dropped-shadow-md
+            drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">סובב
+            אותי</span>
+            <i class="fa-solid fa-hand-point-down text-2xl text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]"></i>
         </div>
 
         <div class="w-48 h-48 relative mb-12 cursor-pointer group" style="perspective:1000px" onclick="rollDice()">
@@ -1017,12 +1021,12 @@
         function initDice() {
             const cube = document.getElementById('cube');
             const faces = [
-                { rot: 'rotateY(0deg)', img: 'deep_man.png', type: 'truth', gender: 'male' },
-                { rot: 'rotateY(180deg)', img: 'deep_woman.png', type: 'truth', gender: 'female' },
-                { rot: 'rotateY(90deg)', img: 'wild_man.png', type: 'dare', gender: 'male' },
-                { rot: 'rotateY(-90deg)', img: 'wild_woman.png', type: 'dare', gender: 'female' },
-                { rot: 'rotateX(90deg)', img: 'cheers_man.png', type: 'truth', gender: 'unisex' },
-                { rot: 'rotateX(-90deg)', img: 'cheers_woman.png', type: 'dare', gender: 'unisex' }
+                { rot: 'rotateY(0deg)', img: 'deep_man.webp?v=1.0.3', type: 'truth', gender: 'male' },
+                { rot: 'rotateY(180deg)', img: 'deep_woman.webp?v=1.0.3', type: 'truth', gender: 'female' },
+                { rot: 'rotateY(90deg)', img: 'wild_man.webp?v=1.0.3', type: 'dare', gender: 'male' },
+                { rot: 'rotateY(-90deg)', img: 'wild_woman.webp?v=1.0.3', type: 'dare', gender: 'female' },
+                { rot: 'rotateX(90deg)', img: 'cheers_man.webp?v=1.0.3', type: 'truth', gender: 'unisex' },
+                { rot: 'rotateX(-90deg)', img: 'cheers_woman.webp?v=1.0.3', type: 'dare', gender: 'unisex' }
             ];
             cube.innerHTML = faces.map(f => `
                 <div class="dice-face absolute w-full h-full flex items-center justify-center text-center rounded-3xl border border-brand-neonBlue/50 shadow-[0_0_15px_rgba(0,243,255,0.2)]" 
