@@ -15,6 +15,7 @@ if ($content -match 'v<span id="app-version">(\d+)\.(\d+)\.(\d+)</span>') {
     # Replace old version string with new one in BOTH locations
     $newContent = $content -replace 'v<span id="app-version">\d+\.\d+\.\d+</span>', "v<span id=`"app-version`">$newVersion</span>"
     $newContent = $newContent -replace '<meta name="app-version" content="\d+\.\d+\.\d+">', "<meta name=`"app-version`" content=`"$newVersion`">"
+    $newContent = $newContent -replace 'href="icon.png\?v=\d+\.\d+\.\d+"', "href=`"icon.png?v=$newVersion`""
     
     Set-Content $file $newContent
     Write-Host "✅ Version successfully updated to: $newVersion" -ForegroundColor Green
