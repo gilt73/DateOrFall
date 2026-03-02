@@ -1,0 +1,10 @@
+# Large unused PNG originals (app uses .webp versions)
+cheers_man.png
+cheers_woman.png
+deep_man.png
+deep_woman.png
+wild_man.png
+wild_woman.png
+
+# Archive files
+*.zip
