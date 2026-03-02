@@ -1,0 +1,594 @@
+{
+  "cube": [
+    {
+      "id": 501,
+      "type": "truth",
+      "content": "מה הדבר הכי מושך פיזית ששמת לב אליו אצלי מיד?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 502,
+      "type": "dare",
+      "content": "תעשה את ההליכה הכי סקסית שלך עד הבר/מטבח וחזרה.",
+      "level": "all",
+      "gender": "male"
+    },
+    {
+      "id": 503,
+      "type": "dare",
+      "content": "תני לי את המבט שאת עושה כשאת רוצה משהו מאוד.",
+      "level": "all",
+      "gender": "female"
+    },
+    {
+      "id": 504,
+      "type": "truth",
+      "content": "כמה כסף הוצאת על הדייט הזה (כולל בגדים/הכנות) לפני שהגעת?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 505,
+      "type": "dare",
+      "content": "דבר במבטא צרפתי ב-3 התורות הבאים.",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 506,
+      "type": "truth",
+      "content": "מה ה\"טייפ\" (Type) שלך בדרך כלל? האם אני עונה עליו?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 507,
+      "type": "dare",
+      "content": "שלח הודעה קולית לאח/אחות שלך ותגיד להם שאתה מאוהב (בצחוק).",
+      "level": "all",
+      "gender": "male"
+    },
+    {
+      "id": 508,
+      "type": "truth",
+      "content": "אם היינו נכנסים להריון הערב (בטעות), איך היית מגיבה?",
+      "level": "all",
+      "gender": "female"
+    },
+    {
+      "id": 509,
+      "type": "dare",
+      "content": "תוריד חולצה ל-2 הדקות הקרובות.",
+      "level": "all",
+      "gender": "male"
+    },
+    {
+      "id": 510,
+      "type": "dare",
+      "content": "תעשי לי מסאז' בקרקפת עד התור הבא.",
+      "level": "all",
+      "gender": "female"
+    },
+    {
+      "id": 511,
+      "type": "truth",
+      "content": "מה הפנטזיה המינית שאתה מתבייש לבקש ממני?",
+      "level": "all",
+      "gender": "male"
+    },
+    {
+      "id": 512,
+      "type": "truth",
+      "content": "מתי בפעם האחרונה הרגשת שאני לוקח/ת אותך כמובן מאליו?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 513,
+      "type": "dare",
+      "content": "נשק אותי כאילו אנחנו בסרט הוליוודי (עם הטיה לאחור).",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 514,
+      "type": "dare",
+      "content": "תזמיני לנו פיצה/קינוח עכשיו, על חשבונך, בלי לשאול אותי מה בא לי.",
+      "level": "all",
+      "gender": "female"
+    },
+    {
+      "id": 515,
+      "type": "truth",
+      "content": "מה הדבר הכי מביך שקרה לך בזמן סקס?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 516,
+      "type": "dare",
+      "content": "תעמוד על הכיסא ותכריז \"אני המלך/מלכה של הדייט הזה!\".",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 517,
+      "type": "truth",
+      "content": "האם אי פעם חיטטת לי בטלפון כשישנתי/התקלחתי?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 518,
+      "type": "dare",
+      "content": "תניח את היד על הירך שלי למשך כל הסיבוב הבא.",
+      "level": "all",
+      "gender": "male"
+    },
+    {
+      "id": 519,
+      "type": "truth",
+      "content": "מי מאיתנו לדעתך יזדקן טוב יותר?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 520,
+      "type": "dare",
+      "content": "תעשי חיקוי של אמא שלי (בלי להעליב!).",
+      "level": "all",
+      "gender": "female"
+    },
+    {
+      "id": 521,
+      "type": "truth",
+      "content": "אם היית צריך לבחור: סקס כל יום או אוכל גורמה כל יום?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 522,
+      "type": "dare",
+      "content": "תן לי להריח לך את בית השחי (רק לרגע!).",
+      "level": "all",
+      "gender": "male"
+    },
+    {
+      "id": 523,
+      "type": "truth",
+      "content": "מה הדבר היחיד שתציל מהבית אם תהיה שריפה (חוץ ממני ומהילדים)?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 524,
+      "type": "dare",
+      "content": "תלחשי לי באוזן משהו גס מאוד.",
+      "level": "all",
+      "gender": "female"
+    },
+    {
+      "id": 525,
+      "type": "truth",
+      "content": "מה הרושם הראשוני שהיה לך עלי, והתברר כטעות מוחלטת?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 526,
+      "type": "dare",
+      "content": "תבקש מהמלצר \"מים בטעם של אהבה\".",
+      "level": "all",
+      "gender": "male"
+    },
+    {
+      "id": 527,
+      "type": "truth",
+      "content": "האם היית יוצא איתי אם הייתי נמוך/ה ב-10 ס\"מ?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 528,
+      "type": "dare",
+      "content": "תרקדי ריקוד בטן קצר (גם אם את לא יודעת).",
+      "level": "all",
+      "gender": "female"
+    },
+    {
+      "id": 529,
+      "type": "truth",
+      "content": "איזה הרגל שלי את/ה שונא/ת בסתר?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 530,
+      "type": "dare",
+      "content": "תעשה לי \"שק קמח\" סביב הסלון.",
+      "level": "all",
+      "gender": "male"
+    }
+  ],
+  "cards": [
+    {
+      "id": 101,
+      "type": "truth",
+      "content": "מה ה\"עובדה המיותרת\" שאתה יודע ואף אחד לא צריך לדעת?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 102,
+      "type": "truth",
+      "content": "אם היו עוצרים אותך במכס, מה הדבר הכי מביך שהיו מוצאים במזוודה שלך?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 103,
+      "type": "truth",
+      "content": "מה הדבר הכי גרוע שבישלת אי פעם וניסית לשכנע אנשים שזה טעים?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 104,
+      "type": "truth",
+      "content": "איזה שיר אתה שומע באוטו כשאתה לבד ומתבייש שמישהו ידע?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 105,
+      "type": "truth",
+      "content": "דרג את כישורי הנהיגה שלך מ-1 עד 10, ואני אגיד לך מה זה אומר עליך.",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 106,
+      "type": "truth",
+      "content": "מתי הבנת בפעם הראשונה ש\"וואלה, יש פה משהו בינינו\"?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 107,
+      "type": "truth",
+      "content": "מה הדבר האחד שאתה פוחד לשאול אותי כי אתה חושש מהתשובה?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 108,
+      "type": "truth",
+      "content": "איזה הרגל שלי מעצבן אותך, אבל למדת לחיות איתו בשלום?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 109,
+      "type": "truth",
+      "content": "מי מאיתנו ימות קודם בסרט אימה ולמה?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 110,
+      "type": "truth",
+      "content": "אם היינו צריכים לבזבז 10,000 ש\"ח הערב רק על הנאה (בלי חשבונות/ילדים), מה היינו עושים?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 111,
+      "type": "truth",
+      "content": "מה הדבר הכי סקסי שעשיתי בשנה האחרונה בלי שהתכוונתי?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 112,
+      "type": "truth",
+      "content": "אם היינו נפגשים היום בפעם הראשונה (בגרסה הנוכחית שלנו), הייתי מתחיל איתך?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 113,
+      "type": "truth",
+      "content": "מה הריב הכי מטופש שהיה לנו אי פעם? (בונוס על חיקויים).",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 114,
+      "type": "truth",
+      "content": "אם היית צריך להחליף את המשפחה שלי במשפחה של סדרת טלוויזיה, במי היית בוחר?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 115,
+      "type": "truth",
+      "content": "מה הזיכרון המשותף שלנו שאתה הכי רוצה לשמור לעת זקנה?",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 201,
+      "type": "dare",
+      "content": "דבר כמו פרשן כדורגל נלהב ב-2 הדקות הקרובות.",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 202,
+      "type": "dare",
+      "content": "תעשה חיקוי של איך אני נראה/ית כשאני כועס/ת.",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 203,
+      "type": "dare",
+      "content": "תן לי לראות את ה\"פתקים\" (Notes) בטלפון שלך.",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 204,
+      "type": "dare",
+      "content": "שים שיר רומנטי בטלפון והזמן אותי לסלואו צמוד באמצע הסלון/רחוב.",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 205,
+      "type": "dare",
+      "content": "מסאז' בכפות הרגליים. 3 דקות. בלי קיטורים.",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 206,
+      "type": "dare",
+      "content": "תתקשר לאמא שלך וספר לה כמה אני מדהים/ה (בלי להסביר למה).",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 207,
+      "type": "dare",
+      "content": "תעצום עיניים, אני נותן לך לטעום משהו מהמקרר. תנחש מה זה.",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 208,
+      "type": "dare",
+      "content": "שחזר את הנשיקה הראשונה שלנו. בדיוק כמו שהייתה (כולל המבוכה).",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 209,
+      "type": "dare",
+      "content": "תעשה לי \"שק קמח\" לחדר השינה/למכונית.",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 210,
+      "type": "dare",
+      "content": "תמצא תמונה שלנו מלפני 3 שנים ותחקה את הפוזה עכשיו.",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 211,
+      "type": "dare",
+      "content": "תכתוב לי מכתב אהבה קצר (3 משפטים) על נייר טואלט ותקריא אותו דרמטית.",
+      "level": "all",
+      "gender": "unisex"
+    },
+    {
+      "id": 212,
+      "type": "dare",
+      "content": "תנסה ללקק את המרפק שלך.",
+      "level": "all",
+      "gender": "unisex"
+    }
+  ],
+ "this_or_that": [
+    { "opt1": "סושי", "opt2": "פיצה", "img1": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c", "img2": "https://images.unsplash.com/photo-1513104890138-7c749659a591" },
+    { "opt1": "בטן גב", "opt2": "טיול בעיר", "img1": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e", "img2": "https://images.unsplash.com/photo-1449824913935-59a10b8d2000" },
+    { "opt1": "סרט בבית", "opt2": "מסיבה", "img1": "https://images.unsplash.com/photo-1536440136628-849c177e76a1", "img2": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30" },
+    { "opt1": "מתוק", "opt2": "מלוח", "img1": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e", "img2": "https://images.unsplash.com/photo-1518977676601-b53f82aba655" },
+    { "opt1": "ספונטני", "opt2": "מתוכנן", "img1": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800", "img2": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b" },
+    { "opt1": "זריחה", "opt2": "שקיעה", "img1": "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8", "img2": "https://images.unsplash.com/photo-1472214103451-9374bd1c798e" }
+  ],
+  "timer_missions": [
+    {
+      "id": 601,
+      "content": "למצוא 3 חפצים כחולים ולהניח על השולחן.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 602,
+      "content": "להגיד לי 5 מחמאות שלא קשורות למראה חיצוני.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 603,
+      "content": "לצייר אותי בצורה מצחיקה על מפית/דף.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 604,
+      "content": "לספר בדיחה (חייבת להצחיק אותי!).",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 605,
+      "content": "למצוא תמונה של הכלב/חתול שלך בטלפון ולהראות לי.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 606,
+      "content": "לעשות סלפי איתי כשאנחנו עושים פרצוף מכוער.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 607,
+      "content": "לנקות את השולחן שלנו מכל זבל/מפיות מיותרות.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 608,
+      "content": "לשלוח הודעה קולית לבוס שלך: \"רק רציתי להגיד לילה טוב\".",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 609,
+      "content": "לעמוד על רגל אחת ולשיר את \"יום הולדת שמח\".",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 610,
+      "content": "להחליף איתי נעל אחת (ימין שלך לשמאל שלי ולהפך).",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 611,
+      "content": "לנשק אותי ב-3 מקומות שונים בפנים (לא בפה).",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 612,
+      "content": "למצוא תמונה מהחתונה/טיול גדול שלנו ולהראות לי.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 613,
+      "content": "להוריד את הגרביים של עצמך בעזרת הרגליים בלבד.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 614,
+      "content": "לתת לי את הטלפון שלך פתוח לרווחה (Unlock).",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 615,
+      "content": "לעשות לי מסאז' בכפות הרגליים (מהר!).",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 616,
+      "content": "להגיד 5 דברים שאני עושה בבית שמעצבנים אותך.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 617,
+      "content": "לפתוח כפתור אחד בחולצה/מכנס.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 618,
+      "content": "לשחזר את הצעת הנישואין שלנו (בגרסת הילוך מהיר).",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 619,
+      "content": "לרוץ למטבח ולהביא לי כוס מים.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 620,
+      "content": "ללקק לי את האוזן (כן, שמעת נכון).",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 621,
+      "content": "להגיד את האלף-בית מהסוף להתחלה (תנסה!).",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 622,
+      "content": "לעשות לייק ל-5 תמונות שלי ברצף באינסטגרם.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 623,
+      "content": "להזמין לנו צ'ייסר/משקה מהברמן.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 624,
+      "content": "למצוא שיר ששנינו אוהבים ולשים אותו בפליי.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    },
+    {
+      "id": 625,
+      "content": "להגיד לי \"אני אוהב/ת אותך\" ב-3 שפות שונות.",
+      "level": "all",
+      "gender": "unisex",
+      "type": "task"
+    }
+  ],
+   "lotto": {
+    "actions": ["נשיקה ב...", "ליטוף ב...", "נשיפה ב..."],
+    "parts": ["צוואר", "אוזן", "כף יד"]
+  }
+}

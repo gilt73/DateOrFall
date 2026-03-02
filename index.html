@@ -9,15 +9,17 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#050510">
 
-    <meta name="app-version" content="1.0.7">
+    <!-- Smart Caching with Version Control -->
+    <meta http-equiv="Cache-Control" content="public, max-age=31536000">
+    <meta name="app-version" content="1.0.6">
 
     <title>דייט או חובה</title>
     <meta property="og:title" content="דייט או חובה">
     <meta property="og:description" content="המשחק ששבר לדייטים את הקרח">
     <meta name="apple-mobile-web-app-title" content="דייט או חובה">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon.png?v=1.0.7">
-    <link rel="icon" type="image/png" href="icon.png?v=1.0.7">
+    <link rel="apple-touch-icon" href="icon.png?v=1.0.6">
+    <link rel="icon" type="image/png" href="icon.png?v=1.0.6">
 
     <!-- Preconnect to CDNs for faster loading -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
@@ -43,19 +45,12 @@
     </script>
 
     <style>
-        /* iOS Safari: use dynamic viewport height so the bottom isn't cut off by the address bar */
-        :root {
-            --app-height: 100vh;
-        }
-
         body {
             background-color: #050510;
             color: white;
             overscroll-behavior: none;
             -webkit-tap-highlight-color: transparent;
             font-family: 'Heebo', sans-serif;
-            height: var(--app-height);
-            height: 100dvh; /* modern browsers */
         }
 
         .text-neon-blue {
@@ -70,16 +65,8 @@
 
         .glass {
             background: rgba(255, 255, 255, 0.03);
-            -webkit-backdrop-filter: blur(20px); /* Safari / iOS */
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        /* Fallback for browsers without backdrop-filter support (older Android) */
-        @supports not (backdrop-filter: blur(1px)) {
-            .glass {
-                background: rgba(15, 15, 30, 0.92);
-            }
         }
 
         .active-pill {
@@ -140,28 +127,10 @@
                 opacity: 1;
             }
         }
-
-        /* Smooth background transitions for This/That images */
-        #tt-1, #tt-2 {
-            transition: background-image 0.4s ease, background-size 0.4s ease;
-            background-size: cover;
-        }
-
-        /* Sparkle container — sits on top of everything, pointer-events off */
-        #sparkle-container {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 9999;
-            overflow: hidden;
-        }
     </style>
 </head>
 
-<body class="w-screen overflow-hidden">
-
-    <!-- Sparkle FX container (scoped so sparkles don't bleed across screens) -->
-    <div id="sparkle-container"></div>
+<body class="h-screen w-screen overflow-hidden">
 
     <!-- Loading -->
     <div id="loading" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center">
@@ -206,7 +175,7 @@
                         class="text-white/80 text-sm font-bold tracking-wider group-hover:text-brand-neonBlue transition-colors">G.T
                         AI Studio</span>
                 </a>
-                <p class="text-white/20 text-[10px] mt-1 tracking-wider font-mono">v<span id="app-version">1.0.7</span>
+                <p class="text-white/20 text-[10px] mt-1 tracking-wider font-mono">v<span id="app-version">1.0.6</span>
                     2026 &copy;</p>
             </div>
         </div>
@@ -311,7 +280,7 @@
             class="absolute top-10 right-6 w-12 h-12 glass rounded-full flex items-center justify-center hover:bg-white/10"><i
                 class="fa-solid fa-xmark text-white"></i></button>
         <div onclick="nextCard()" id="card-display"
-            class="w-full max-w-xs h-[450px] max-h-[70vh] glass rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center cursor-pointer relative border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] active:scale-[0.98] transition-all">
+            class="w-full max-w-xs h-[450px] glass rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center cursor-pointer relative border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] active:scale-[0.98] transition-all">
             <div class="text-[10px] tracking-[0.3em] text-brand-amber uppercase mb-8 font-black" id="card-level-label">
                 ALL</div>
             <p id="card-content" class="text-2xl font-bold leading-relaxed text-white drop-shadow-md"></p>
@@ -356,7 +325,7 @@
                 <circle cx="50%" cy="50%" r="45%" fill="transparent" stroke="rgba(255,255,255,0.05)" stroke-width="8">
                 </circle>
                 <circle id="timer-ring" cx="50%" cy="50%" r="45%" fill="transparent" stroke="#00f3ff" stroke-width="8"
-                    stroke-linecap="round"
+                    stroke-dasharray="800" stroke-dashoffset="800" stroke-linecap="round"
                     class="drop-shadow-[0_0_10px_rgba(0,243,255,0.5)]"></circle>
             </svg>
             <div id="timer-display"
@@ -388,23 +357,9 @@
     </div>
 
     <script>
-        // ── iOS Safari: recalculate real viewport height (accounts for address bar) ──
-        function setAppHeight() {
-            document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
-        }
-        window.addEventListener('resize', setAppHeight);
-        window.addEventListener('orientationchange', setAppHeight);
-        setAppHeight();
-
-        // ── Constants ──
-        const TIMER_DURATION = 30;   // seconds
-        const DICE_SPIN_TIME = 2000; // ms
-
         let gameData = null;
         let currentLevel = 'date';
         let timerInterval;
-        let isDiceRolling = false;  // prevents double-tap during dice animation
-        let timerCircumference = 0; // set dynamically when timer screen opens
 
         function enterLobby() {
             const landing = document.getElementById('landing-screen');
@@ -1018,9 +973,6 @@
                 }
             };
 
-            // Kick off image preloading in the background after data is ready
-            preloadThisThatImages();
-
             // Hide loading, show LANDING (not home)
             setTimeout(() => {
                 document.getElementById('loading').style.display = 'none';
@@ -1059,7 +1011,6 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('home-screen').classList.add('active');
             if (timerInterval) clearInterval(timerInterval);
-            isDiceRolling = false; // always unlock when leaving dice screen
         }
 
         // DICE LOGIC
@@ -1080,9 +1031,6 @@
         }
 
         function rollDice() {
-            if (isDiceRolling) return; // prevent double-tap during animation
-            isDiceRolling = true;
-
             const resCard = document.getElementById('dice-result');
             const resText = document.getElementById('dice-text');
             const cube = document.getElementById('cube');
@@ -1098,7 +1046,7 @@
             ];
 
             const chosen = finalRotations[Math.floor(Math.random() * finalRotations.length)];
-            const spinX = (Math.floor(Math.random() * 3 + 3) * 360) + chosen.x;
+            const spinX = (Math.floor(Math.random() * 3 + 3) * 360) + chosen.x; // 3-5 full rotations + final position
             const spinY = (Math.floor(Math.random() * 3 + 3) * 360) + chosen.y;
 
             cube.style.transform = `rotateX(${spinX}deg) rotateY(${spinY}deg)`;
@@ -1110,8 +1058,7 @@
                 resText.innerText = item ? item.content : "אין משימות";
                 resCard.style.opacity = '1';
                 spawnSparkles(window.innerWidth / 2, window.innerHeight / 3, 30);
-                isDiceRolling = false; // unlock after result appears
-            }, DICE_SPIN_TIME);
+            }, 2000);
         }
 
         // CARDS LOGIC
@@ -1130,77 +1077,34 @@
         }
 
         // THIS THAT LOGIC
-        function addUnsplashParams(url) {
-            // Limit Unsplash images to 800px wide at 75% quality to reduce bandwidth
-            if (url.includes('unsplash.com')) {
-                return url + (url.includes('?') ? '&' : '?') + 'w=800&q=75&auto=format';
-            }
-            return url;
-        }
-
         function nextThisThat() {
             if (!gameData || !gameData.this_or_that.length) return;
             const item = getRandom(gameData.this_or_that);
             const d1 = document.getElementById('tt-1');
             const d2 = document.getElementById('tt-2');
-            const url1 = addUnsplashParams(item.img1);
-            const url2 = addUnsplashParams(item.img2);
-
-            // Preload both images before switching so there's no flash
-            const img1 = new Image();
-            const img2 = new Image();
-            img1.src = url1;
-            img2.src = url2;
-
-            img1.onload = () => { d1.style.backgroundImage = `url(${url1})`; };
-            img2.onload = () => { d2.style.backgroundImage = `url(${url2})`; };
-
+            d1.style.backgroundImage = `url(${item.img1})`;
             d1.querySelector('h2').innerText = item.opt1;
+            d2.style.backgroundImage = `url(${item.img2})`;
             d2.querySelector('h2').innerText = item.opt2;
         }
 
-        function preloadThisThatImages() {
-            if (!gameData || !gameData.this_or_that) return;
-            // Preload all This/That images in the background on first load
-            gameData.this_or_that.forEach(item => {
-                new Image().src = addUnsplashParams(item.img1);
-                new Image().src = addUnsplashParams(item.img2);
-            });
-        }
-
         // TIMER LOGIC
-        function getTimerCircumference() {
-            // Calculate the actual circumference from the rendered SVG ring
-            const ring = document.getElementById('timer-ring');
-            const r = ring.r.baseVal.value;
-            return 2 * Math.PI * r;
-        }
-
         function startTimer() {
             const display = document.getElementById('timer-display');
             const ring = document.getElementById('timer-ring');
             const mission = document.getElementById('timer-mission');
             const btn = document.getElementById('timer-btn');
 
-            // Get circumference dynamically so it matches the actual rendered SVG size
-            timerCircumference = getTimerCircumference();
-            ring.style.strokeDasharray = timerCircumference;
-
             const item = getRandom(gameData.timer_missions);
             mission.innerText = item ? item.content : "בצעו משימה!";
             mission.style.opacity = '1';
 
-            let left = TIMER_DURATION;
+            let left = 30;
             btn.disabled = true;
-
-            // Show full ring immediately when timer starts
-            ring.style.strokeDashoffset = 0;
-
             timerInterval = setInterval(() => {
                 left--;
                 display.innerText = left;
-                // Ring empties as time counts down (full → empty)
-                ring.style.strokeDashoffset = timerCircumference * (1 - left / TIMER_DURATION);
+                ring.style.strokeDashoffset = 800 - (left / 30 * 800);
                 if (left <= 0) {
                     clearInterval(timerInterval);
                     btn.disabled = false;
@@ -1212,11 +1116,8 @@
 
         function resetTimer() {
             if (timerInterval) clearInterval(timerInterval);
-            const ring = document.getElementById('timer-ring');
-            timerCircumference = getTimerCircumference();
-            ring.style.strokeDasharray = timerCircumference;
-            ring.style.strokeDashoffset = timerCircumference; // empty ring = ready state
-            document.getElementById('timer-display').innerText = TIMER_DURATION;
+            document.getElementById('timer-display').innerText = "30";
+            document.getElementById('timer-ring').style.strokeDashoffset = "800";
             document.getElementById('timer-mission').style.opacity = "0";
             document.getElementById('timer-btn').disabled = false;
         }
@@ -1238,25 +1139,18 @@
         }
 
         function spawnSparkles(x, y, amount) {
-            const container = document.getElementById('sparkle-container');
             for (let i = 0; i < amount; i++) {
                 const s = document.createElement('div');
                 s.className = 'sparkle';
-                s.style.left = x + 'px';
-                s.style.top = y + 'px';
+                s.style.left = x + 'px'; s.style.top = y + 'px';
                 const size = Math.random() * 5 + 2;
-                s.style.width = size + 'px';
-                s.style.height = size + 'px';
+                s.style.width = size + 'px'; s.style.height = size + 'px';
                 s.style.backgroundColor = Math.random() > 0.5 ? '#00f3ff' : '#ff00ff';
-                container.appendChild(s);
+                document.body.appendChild(s);
                 const tx = (Math.random() - 0.5) * 200;
                 const ty = (Math.random() - 0.5) * 200;
-                const anim = s.animate(
-                    [{ transform: 'translate(0,0) scale(1)', opacity: 1 },
-                     { transform: `translate(${tx}px,${ty}px) scale(0)`, opacity: 0 }],
-                    { duration: 1000 }
-                );
-                anim.onfinish = () => s.remove(); // clean up immediately when done
+                s.animate([{ transform: 'translate(0,0) scale(1)', opacity: 1 }, { transform: `translate(${tx}px,${ty}px) scale(0)`, opacity: 0 }], { duration: 1000 });
+                setTimeout(() => s.remove(), 1000);
             }
         }
 

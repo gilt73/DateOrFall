@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#050510">
+
+    <title>דייט או חובה</title>
+    <meta property="og:title" content="דייט או חובה">
+    <meta property="og:description" content="המשחק ששבר לדייטים את הקרח">
+    <meta name="apple-mobile-web-app-title" content="דייט או חובה">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="icon" type="image/png" href="icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Outfit:wght@400;600;800&family=Heebo:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Heebo', 'sans-serif'], display: ['Outfit', 'sans-serif'], handwriting: ['Amatic SC', 'cursive'] },
+                    colors: { brand: { gold: '#FFD700', deep: '#050510', neonBlue: '#00f3ff', neonPink: '#ff00ff', amber: '#ffbf00', purple: '#9d00ff' } }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050510;
+            color: white;
+            overscroll-behavior: none;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Heebo', sans-serif;
+        }
+
+        .text-neon-blue {
+            color: #00f3ff;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.4);
+        }
+
+        .text-neon-pink {
+            color: #ff00ff;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.8), 0 0 20px rgba(255, 0, 255, 0.4);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .active-pill {
+            background: #00f3ff;
+            color: black;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
+        }
+
+        .dice-face {
+            backface-visibility: hidden;
+            background: rgba(18, 18, 25, 0.98);
+            border: 1px solid #00f3ff;
+            box-shadow: inset 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 1s forwards;
+            z-index: 100;
+        }
+
+        @keyframes twinkle {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: flex;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="h-screen w-screen overflow-hidden">
+
+    <!-- Loading -->
+    <div id="loading" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-brand-amber mb-4"></div>
+        <p class="text-xs text-white/50" id="loading-status">מכין את האווירה...</p>
+    </div>
+
+    <!-- LANDING SCREEN -->
+    <div id="landing-screen"
+        class="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center text-center p-6 bg-cover bg-center hidden"
+        style="background-image: url('https://images.unsplash.com/photo-1543007630-9710e4a00a20?q=80&w=1935&auto=format&fit=crop');">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
+
+        <div class="relative z-10 flex flex-col items-center">
+            <div class="mb-8 relative">
+                <h1 class="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-neonPink to-brand-neonBlue drop-shadow-[0_0_15px_rgba(255,0,255,0.5)]"
+                    style="font-family: 'Outfit', sans-serif;">
+                    Date<br><span class="text-5xl text-white">or</span><br>Fall
+                </h1>
+                <div
+                    class="w-full h-1 bg-gradient-to-r from-transparent via-brand-amber to-transparent mt-4 opacity-70">
+                </div>
+            </div>
+
+            <p class="text-brand-amber text-4xl mb-12 font-bold max-w-sm leading-relaxed font-handwriting">
+                המשחק ששבר לדייטים את הקרח
+            </p>
+
+            <button onclick="enterLobby()"
+                class="group relative px-10 py-5 bg-gradient-to-r from-brand-neonPink to-brand-purple rounded-full shadow-[0_0_30px_rgba(255,0,255,0.4)] transition-all active:scale-95 hover:shadow-[0_0_50px_rgba(255,0,255,0.6)]">
+                <div class="absolute inset-0 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors"></div>
+                <span class="relative text-white font-black text-2xl tracking-wider flex items-center gap-3">
+                    שחק אותה <i class="fa-solid fa-heart text-white animate-pulse"></i>
+                </span>
+            </button>
+            <p class="mt-6 text-white/30 text-xs tracking-widest uppercase">Premium Dating Experience Powered By G.T AI
+                Apps</p>
+        </div>
+    </div>
+
+    <!-- MAIN LOBBY -->
+    <div id="home-screen" class="screen w-full h-full flex flex-col p-6 overflow-y-auto hidden">
+        <!-- Background Overlay -->
+        <div class="fixed inset-0 -z-10 pointer-events-none" style="background: radial-gradient(circle at 50% 20%, rgba(255, 150, 50, 0.15), transparent 70%), 
+                    linear-gradient(to bottom, #1a1a2e, #0f0f1a);"></div>
+
+        <div class="flex flex-col items-center justify-center mt-12 mb-10">
+            <h1 class="text-6xl font-black text-brand-neonBlue drop-shadow-[0_0_10px_rgba(0,243,255,0.4)]">דייט</h1>
+            <span class="text-xl font-light text-brand-amber my-1" style="font-family: 'Outfit', sans-serif;">OR</span>
+            <h1 class="text-6xl font-black text-brand-neonPink drop-shadow-[0_0_10px_rgba(255,0,255,0.4)]">חובה</h1>
+        </div>
+
+        <div class="flex justify-center mb-10">
+            <div
+                class="bg-black/40 p-1 rounded-full flex items-center w-full max-w-xs border border-white/10 backdrop-blur-md">
+                <button onclick="setLevel('spicy', this)"
+                    class="level-btn flex-1 py-2 text-sm font-bold text-white/40 transition-all rounded-full hover:text-white/70">Spicy</button>
+                <button onclick="setLevel('couple', this)"
+                    class="level-btn flex-1 py-2 text-sm font-bold text-white/40 transition-all rounded-full hover:text-white/70">Couple</button>
+                <button onclick="setLevel('date', this)"
+                    class="level-btn flex-1 py-2 text-sm font-bold active-pill rounded-full transition-all text-black shadow-[0_0_15px_rgba(255,215,0,0.4)]">Date</button>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-4 max-w-sm mx-auto w-full">
+            <button onclick="openGame('cards')"
+                class="glass p-6 rounded-[2rem] flex items-center justify-between group active:scale-95 transition-transform hover:border-brand-neonBlue/50">
+                <div class="flex items-center gap-4 text-right">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-brand-neonBlue/10 flex items-center justify-center text-brand-neonBlue shadow-[0_0_15px_rgba(0,243,255,0.2)]">
+                        <i class="fa-solid fa-layer-group text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">קלפי השאלות</h3>
+                        <p class="text-xs text-brand-amber/80">Classic Deck</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-left text-white/20 group-hover:text-white/60 transition-colors"></i>
+            </button>
+
+            <div class="grid grid-cols-3 gap-3">
+                <button onclick="openGame('timer')"
+                    class="glass aspect-square rounded-[1.5rem] flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform hover:border-purple-400/50">
+                    <i
+                        class="fa-solid fa-hourglass-start text-purple-400 text-xl drop-shadow-[0_0_8px_rgba(192,132,252,0.5)]"></i><span
+                        class="text-[11px] font-bold text-white/60">Timer</span>
+                </button>
+                <button onclick="openGame('dice')"
+                    class="glass aspect-square rounded-[1.5rem] flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform hover:border-brand-amber/50">
+                    <i
+                        class="fa-solid fa-dice text-brand-amber text-xl drop-shadow-[0_0_8px_rgba(255,191,0,0.5)]"></i><span
+                        class="text-[11px] font-bold text-white/60">Dice</span>
+                </button>
+                <button onclick="openGame('thisthat')"
+                    class="glass aspect-square rounded-[1.5rem] flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform hover:border-brand-neonPink/50">
+                    <i
+                        class="fa-solid fa-scale-balanced text-brand-neonPink text-xl drop-shadow-[0_0_8px_rgba(255,0,255,0.5)]"></i><span
+                        class="text-[11px] font-bold text-white/60">This/That</span>
+                </button>
+            </div>
+
+            <button onclick="openGame('lotto')"
+                class="glass w-full p-4 rounded-2xl flex items-center justify-center gap-3 opacity-80 active:scale-95 transition-transform hover:opacity-100 border border-brand-neonBlue/20">
+                <i class="fa-solid fa-hand-sparkles text-brand-neonBlue"></i><span
+                    class="text-xs font-bold text-white">לוטו מגע (🎰 בונוס)</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- DICE -->
+    <div id="dice-screen"
+        class="screen fixed inset-0 bg-black/95 flex-col items-center justify-center z-50 p-6 backdrop-blur-xl">
+        <button onclick="goHome()"
+            class="absolute top-10 right-6 w-12 h-12 glass rounded-full flex items-center justify-center hover:bg-white/10"><i
+                class="fa-solid fa-xmark text-white"></i></button>
+        <div class="w-48 h-48 relative mb-24" style="perspective:1000px">
+            <div id="cube" class="w-full h-full relative"
+                style="transform-style:preserve-3d; transition:transform 2s cubic-bezier(0.15, 0.9, 0.3, 1.2)"></div>
+        </div>
+        <button onclick="rollDice()"
+            class="w-full max-w-xs py-6 bg-brand-neonBlue text-black font-black text-xl rounded-2xl shadow-[0_0_25px_rgba(0,243,255,0.4)] active:scale-95 transition-transform">הטל
+            קובייה</button>
+        <div id="dice-result"
+            class="mt-8 glass p-6 rounded-2xl w-full max-w-xs text-center opacity-0 transition-opacity border border-brand-neonBlue/30">
+            <p id="dice-text" class="text-lg font-bold text-brand-neonBlue drop-shadow-[0_0_5px_rgba(0,243,255,0.8)]">
+            </p>
+        </div>
+    </div>
+
+    <!-- CARDS -->
+    <div id="cards-screen" class="screen fixed inset-0 bg-black/95 flex-col items-center justify-center z-50 p-6">
+        <button onclick="goHome()"
+            class="absolute top-10 right-6 w-12 h-12 glass rounded-full flex items-center justify-center hover:bg-white/10"><i
+                class="fa-solid fa-xmark text-white"></i></button>
+        <div onclick="nextCard()" id="card-display"
+            class="w-full max-w-xs h-[450px] glass rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center cursor-pointer relative border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] active:scale-[0.98] transition-all">
+            <div class="text-[10px] tracking-[0.3em] text-brand-amber uppercase mb-8 font-black" id="card-level-label">
+                ALL</div>
+            <p id="card-content" class="text-2xl font-bold leading-relaxed text-white drop-shadow-md"></p>
+            <div class="absolute bottom-10 text-[10px] text-brand-neonBlue font-bold animate-pulse tracking-widest">TAP
+                FOR NEXT CARD</div>
+        </div>
+    </div>
+
+    <!-- THIS THAT -->
+    <div id="thisthat-screen" class="screen fixed inset-0 bg-black flex-col z-50">
+        <button onclick="goHome()"
+            class="absolute top-10 right-6 w-10 h-10 glass rounded-full flex items-center justify-center z-[60] bg-black/50 hover:bg-black/70"><i
+                class="fa-solid fa-xmark text-white"></i></button>
+        <div onclick="nextThisThat()" id="tt-1"
+            class="flex-1 relative flex items-center justify-center bg-cover bg-center transition-all duration-700 group cursor-pointer">
+            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
+            <h2
+                class="relative text-4xl font-black px-6 text-center text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] transform group-hover:scale-110 transition-transform duration-500">
+            </h2>
+        </div>
+        <div class="h-16 flex items-center justify-center z-10 bg-[#0f0f1a] border-y border-white/10 relative">
+            <div
+                class="w-14 h-14 rounded-full bg-white text-black font-black flex items-center justify-center text-xl shadow-[0_0_20px_rgba(255,255,255,0.3)] z-20 absolute">
+                VS</div>
+        </div>
+        <div onclick="nextThisThat()" id="tt-2"
+            class="flex-1 relative flex items-center justify-center bg-cover bg-center transition-all duration-700 group cursor-pointer">
+            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
+            <h2
+                class="relative text-4xl font-black px-6 text-center text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] transform group-hover:scale-110 transition-transform duration-500">
+            </h2>
+        </div>
+    </div>
+
+    <!-- TIMER -->
+    <div id="timer-screen" class="screen fixed inset-0 bg-black/95 flex-col items-center justify-center z-50 p-6">
+        <button onclick="goHome()"
+            class="absolute top-10 right-6 w-12 h-12 glass rounded-full flex items-center justify-center hover:bg-white/10"><i
+                class="fa-solid fa-xmark text-white"></i></button>
+        <div class="relative w-64 h-64 flex items-center justify-center mb-12">
+            <svg class="absolute inset-0 w-full h-full -rotate-90">
+                <circle cx="50%" cy="50%" r="45%" fill="transparent" stroke="rgba(255,255,255,0.05)" stroke-width="8">
+                </circle>
+                <circle id="timer-ring" cx="50%" cy="50%" r="45%" fill="transparent" stroke="#00f3ff" stroke-width="8"
+                    stroke-dasharray="800" stroke-dashoffset="800" stroke-linecap="round"
+                    class="drop-shadow-[0_0_10px_rgba(0,243,255,0.5)]"></circle>
+            </svg>
+            <div id="timer-display"
+                class="text-7xl font-black text-brand-neonBlue drop-shadow-[0_0_15px_rgba(0,243,255,0.6)]">30</div>
+        </div>
+        <div id="timer-mission"
+            class="mb-12 px-8 text-center text-lg font-bold opacity-0 transition-opacity min-h-[60px] text-white"></div>
+        <button id="timer-btn" onclick="startTimer()"
+            class="w-48 py-4 bg-brand-neonBlue text-black font-bold rounded-2xl shadow-[0_0_20px_rgba(0,243,255,0.3)] hover:shadow-[0_0_30px_rgba(0,243,255,0.5)] transition-shadow">התחל
+            משימה</button>
+    </div>
+
+    <!-- LOTTO -->
+    <div id="lotto-screen" class="screen fixed inset-0 bg-black/95 flex-col items-center justify-center z-50 p-6">
+        <button onclick="goHome()"
+            class="absolute top-10 right-6 w-12 h-12 glass rounded-full flex items-center justify-center hover:bg-white/10"><i
+                class="fa-solid fa-xmark text-white"></i></button>
+        <div class="flex gap-4 mb-12">
+            <div id="slot-1"
+                class="w-36 h-36 glass rounded-3xl flex items-center justify-center text-center p-4 font-bold text-brand-neonBlue text-xl border border-brand-neonBlue/30 shadow-[0_0_20px_rgba(0,243,255,0.1)]">
+                ?</div>
+            <div id="slot-2"
+                class="w-36 h-36 glass rounded-3xl flex items-center justify-center text-center p-4 font-bold text-brand-neonPink text-xl border border-brand-neonPink/30 shadow-[0_0_20px_rgba(255,0,255,0.1)]">
+                ?</div>
+        </div>
+        <button onclick="spinLotto()"
+            class="w-full max-w-xs py-5 bg-gradient-to-r from-white to-gray-200 text-brand-deep font-black rounded-2xl shadow-xl hover:scale-105 transition-transform">סובב
+            לוטו</button>
+    </div>
+
+    <script>
+        let gameData = null;
+        let currentLevel = 'date';
+        let timerInterval;
+
+        function enterLobby() {
+            const landing = document.getElementById('landing-screen');
+            const lobby = document.getElementById('home-screen');
+
+            landing.style.transition = 'transform 0.8s cubic-bezier(0.7, 0, 0.3, 1), opacity 0.5s ease';
+            landing.style.transform = 'scale(1.5)';
+            landing.style.opacity = '0';
+
+            setTimeout(() => {
+                landing.style.display = 'none';
+                lobby.classList.remove('hidden');
+                lobby.classList.add('active');
+            }, 400);
+        }
+
+        function loadGameContent() {
+            // FIX: Embed data directly to allow local execution without a server
+            gameData = {
+                "cube": [
+                    {
+                        "id": 501,
+                        "type": "truth",
+                        "content": "מה הדבר הכי מושך פיזית ששמת לב אליו אצלי מיד?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 502,
+                        "type": "dare",
+                        "content": "תעשה את ההליכה הכי סקסית שלך עד הבר/מטבח וחזרה.",
+                        "level": "all",
+                        "gender": "male"
+                    },
+                    {
+                        "id": 503,
+                        "type": "dare",
+                        "content": "תני לי את המבט שאת עושה כשאת רוצה משהו מאוד.",
+                        "level": "all",
+                        "gender": "female"
+                    },
+                    {
+                        "id": 504,
+                        "type": "truth",
+                        "content": "כמה כסף הוצאת על הדייט הזה (כולל בגדים/הכנות) לפני שהגעת?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 505,
+                        "type": "dare",
+                        "content": "דבר במבטא צרפתי ב-3 התורות הבאים.",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 506,
+                        "type": "truth",
+                        "content": "מה ה\"טייפ\" (Type) שלך בדרך כלל? האם אני עונה עליו?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 507,
+                        "type": "dare",
+                        "content": "שלח הודעה קולית לאח/אחות שלך ותגיד להם שאתה מאוהב (בצחוק).",
+                        "level": "all",
+                        "gender": "male"
+                    },
+                    {
+                        "id": 508,
+                        "type": "truth",
+                        "content": "אם היינו נכנסים להריון הערב (בטעות), איך היית מגיבה?",
+                        "level": "all",
+                        "gender": "female"
+                    },
+                    {
+                        "id": 509,
+                        "type": "dare",
+                        "content": "תוריד חולצה ל-2 הדקות הקרובות.",
+                        "level": "all",
+                        "gender": "male"
+                    },
+                    {
+                        "id": 510,
+                        "type": "dare",
+                        "content": "תעשי לי מסאז' בקרקפת עד התור הבא.",
+                        "level": "all",
+                        "gender": "female"
+                    },
+                    {
+                        "id": 511,
+                        "type": "truth",
+                        "content": "מה הפנטזיה המינית שאתה מתבייש לבקש ממני?",
+                        "level": "all",
+                        "gender": "male"
+                    },
+                    {
+                        "id": 512,
+                        "type": "truth",
+                        "content": "מתי בפעם האחרונה הרגשת שאני לוקח/ת אותך כמובן מאליו?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 513,
+                        "type": "dare",
+                        "content": "נשק אותי כאילו אנחנו בסרט הוליוודי (עם הטיה לאחור).",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 514,
+                        "type": "dare",
+                        "content": "תזמיני לנו פיצה/קינוח עכשיו, על חשבונך, בלי לשאול אותי מה בא לי.",
+                        "level": "all",
+                        "gender": "female"
+                    },
+                    {
+                        "id": 515,
+                        "type": "truth",
+                        "content": "מה הדבר הכי מביך שקרה לך בזמן סקס?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 516,
+                        "type": "dare",
+                        "content": "תעמוד על הכיסא ותכריז \"אני המלך/מלכה של הדייט הזה!\".",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 517,
+                        "type": "truth",
+                        "content": "האם אי פעם חיטטת לי בטלפון כשישנתי/התקלחתי?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 518,
+                        "type": "dare",
+                        "content": "תניח את היד על הירך שלי למשך כל הסיבוב הבא.",
+                        "level": "all",
+                        "gender": "male"
+                    },
+                    {
+                        "id": 519,
+                        "type": "truth",
+                        "content": "מי מאיתנו לדעתך יזדקן טוב יותר?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 520,
+                        "type": "dare",
+                        "content": "תעשי חיקוי של אמא שלי (בלי להעליב!).",
+                        "level": "all",
+                        "gender": "female"
+                    },
+                    {
+                        "id": 521,
+                        "type": "truth",
+                        "content": "אם היית צריך לבחור: סקס כל יום או אוכל גורמה כל יום?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 522,
+                        "type": "dare",
+                        "content": "תן לי להריח לך את בית השחי (רק לרגע!).",
+                        "level": "all",
+                        "gender": "male"
+                    },
+                    {
+                        "id": 523,
+                        "type": "truth",
+                        "content": "מה הדבר היחיד שתציל מהבית אם תהיה שריפה (חוץ ממני ומהילדים)?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 524,
+                        "type": "dare",
+                        "content": "תלחשי לי באוזן משהו גס מאוד.",
+                        "level": "all",
+                        "gender": "female"
+                    },
+                    {
+                        "id": 525,
+                        "type": "truth",
+                        "content": "מה הרושם הראשוני שהיה לך עלי, והתברר כטעות מוחלטת?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 526,
+                        "type": "dare",
+                        "content": "תבקש מהמלצר \"מים בטעם של אהבה\".",
+                        "level": "all",
+                        "gender": "male"
+                    },
+                    {
+                        "id": 527,
+                        "type": "truth",
+                        "content": "האם היית יוצא איתי אם הייתי נמוך/ה ב-10 ס\"מ?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 528,
+                        "type": "dare",
+                        "content": "תרקדי ריקוד בטן קצר (גם אם את לא יודעת).",
+                        "level": "all",
+                        "gender": "female"
+                    },
+                    {
+                        "id": 529,
+                        "type": "truth",
+                        "content": "איזה הרגל שלי את/ה שונא/ת בסתר?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 530,
+                        "type": "dare",
+                        "content": "תעשה לי \"שק קמח\" סביב הסלון.",
+                        "level": "all",
+                        "gender": "male"
+                    }
+                ],
+                "cards": [
+                    {
+                        "id": 101,
+                        "type": "truth",
+                        "content": "מה ה\"עובדה המיותרת\" שאתה יודע ואף אחד לא צריך לדעת?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 102,
+                        "type": "truth",
+                        "content": "אם היו עוצרים אותך במכס, מה הדבר הכי מביך שהיו מוצאים במזוודה שלך?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 103,
+                        "type": "truth",
+                        "content": "מה הדבר הכי גרוע שבישלת אי פעם וניסית לשכנע אנשים שזה טעים?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 104,
+                        "type": "truth",
+                        "content": "איזה שיר אתה שומע באוטו כשאתה לבד ומתבייש שמישהו ידע?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 105,
+                        "type": "truth",
+                        "content": "דרג את כישורי הנהיגה שלך מ-1 עד 10, ואני אגיד לך מה זה אומר עליך.",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 106,
+                        "type": "truth",
+                        "content": "מתי הבנת בפעם הראשונה ש\"וואלה, יש פה משהו בינינו\"?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 107,
+                        "type": "truth",
+                        "content": "מה הדבר האחד שאתה פוחד לשאול אותי כי אתה חושש מהתשובה?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 108,
+                        "type": "truth",
+                        "content": "איזה הרגל שלי מעצבן אותך, אבל למדת לחיות איתו בשלום?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 109,
+                        "type": "truth",
+                        "content": "מי מאיתנו ימות קודם בסרט אימה ולמה?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 110,
+                        "type": "truth",
+                        "content": "אם היינו צריכים לבזבז 10,000 ש\"ח הערב רק על הנאה (בלי חשבונות/ילדים), מה היינו עושים?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 111,
+                        "type": "truth",
+                        "content": "מה הדבר הכי סקסי שעשיתי בשנה האחרונה בלי שהתכוונתי?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 112,
+                        "type": "truth",
+                        "content": "אם היינו נפגשים היום בפעם הראשונה (בגרסה הנוכחית שלנו), הייתי מתחיל איתך?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 113,
+                        "type": "truth",
+                        "content": "מה הריב הכי מטופש שהיה לנו אי פעם? (בונוס על חיקויים).",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 114,
+                        "type": "truth",
+                        "content": "אם היית צריך להחליף את המשפחה שלי במשפחה של סדרת טלוויזיה, במי היית בוחר?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 115,
+                        "type": "truth",
+                        "content": "מה הזיכרון המשותף שלנו שאתה הכי רוצה לשמור לעת זקנה?",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 201,
+                        "type": "dare",
+                        "content": "דבר כמו פרשן כדורגל נלהב ב-2 הדקות הקרובות.",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 202,
+                        "type": "dare",
+                        "content": "תעשה חיקוי של איך אני נראה/ית כשאני כועס/ת.",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 203,
+                        "type": "dare",
+                        "content": "תן לי לראות את ה\"פתקים\" (Notes) בטלפון שלך.",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 204,
+                        "type": "dare",
+                        "content": "שים שיר רומנטי בטלפון והזמן אותי לסלואו צמוד באמצע הסלון/רחוב.",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 205,
+                        "type": "dare",
+                        "content": "מסאז' בכפות הרגליים. 3 דקות. בלי קיטורים.",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 206,
+                        "type": "dare",
+                        "content": "תתקשר לאמא שלך וספר לה כמה אני מדהים/ה (בלי להסביר למה).",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 207,
+                        "type": "dare",
+                        "content": "תעצום עיניים, אני נותן לך לטעום משהו מהמקרר. תנחש מה זה.",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 208,
+                        "type": "dare",
+                        "content": "שחזר את הנשיקה הראשונה שלנו. בדיוק כמו שהייתה (כולל המבוכה).",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 209,
+                        "type": "dare",
+                        "content": "תעשה לי \"שק קמח\" לחדר השינה/למכונית.",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 210,
+                        "type": "dare",
+                        "content": "תמצא תמונה שלנו מלפני 3 שנים ותחקה את הפוזה עכשיו.",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 211,
+                        "type": "dare",
+                        "content": "תכתוב לי מכתב אהבה קצר (3 משפטים) על נייר טואלט ותקריא אותו דרמטית.",
+                        "level": "all",
+                        "gender": "unisex"
+                    },
+                    {
+                        "id": 212,
+                        "type": "dare",
+                        "content": "תנסה ללקק את המרפק שלך.",
+                        "level": "all",
+                        "gender": "unisex"
+                    }
+                ],
+                "this_or_that": [
+                    { "opt1": "סושי", "opt2": "פיצה", "img1": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c", "img2": "https://images.unsplash.com/photo-1513104890138-7c749659a591" },
+                    { "opt1": "בטן גב", "opt2": "טיול בעיר", "img1": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e", "img2": "https://images.unsplash.com/photo-1449824913935-59a10b8d2000" },
+                    { "opt1": "סרט בבית", "opt2": "מסיבה", "img1": "https://images.unsplash.com/photo-1536440136628-849c177e76a1", "img2": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30" },
+                    { "opt1": "מתוק", "opt2": "מלוח", "img1": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e", "img2": "https://images.unsplash.com/photo-1518977676601-b53f82aba655" },
+                    { "opt1": "ספונטני", "opt2": "מתוכנן", "img1": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800", "img2": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b" },
+                    { "opt1": "זריחה", "opt2": "שקיעה", "img1": "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8", "img2": "https://images.unsplash.com/photo-1472214103451-9374bd1c798e" }
+                ],
+                "timer_missions": [
+                    {
+                        "id": 601,
+                        "content": "למצוא 3 חפצים כחולים ולהניח על השולחן.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 602,
+                        "content": "להגיד לי 5 מחמאות שלא קשורות למראה חיצוני.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 603,
+                        "content": "לצייר אותי בצורה מצחיקה על מפית/דף.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 604,
+                        "content": "לספר בדיחה (חייבת להצחיק אותי!).",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 605,
+                        "content": "למצוא תמונה של הכלב/חתול שלך בטלפון ולהראות לי.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 606,
+                        "content": "לעשות סלפי איתי כשאנחנו עושים פרצוף מכוער.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 607,
+                        "content": "לנקות את השולחן שלנו מכל זבל/מפיות מיותרות.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 608,
+                        "content": "לשלוח הודעה קולית לבוס שלך: \"רק רציתי להגיד לילה טוב\".",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 609,
+                        "content": "לעמוד על רגל אחת ולשיר את \"יום הולדת שמח\".",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 610,
+                        "content": "להחליף איתי נעל אחת (ימין שלך לשמאל שלי ולהפך).",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 611,
+                        "content": "לנשק אותי ב-3 מקומות שונים בפנים (לא בפה).",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 612,
+                        "content": "למצוא תמונה מהחתונה/טיול גדול שלנו ולהראות לי.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 613,
+                        "content": "להוריד את הגרביים של עצמך בעזרת הרגליים בלבד.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 614,
+                        "content": "לתת לי את הטלפון שלך פתוח לרווחה (Unlock).",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 615,
+                        "content": "לעשות לי מסאז' בכפות הרגליים (מהר!).",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 616,
+                        "content": "להגיד 5 דברים שאני עושה בבית שמעצבנים אותך.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 617,
+                        "content": "לפתוח כפתור אחד בחולצה/מכנס.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 618,
+                        "content": "לשחזר את הצעת הנישואין שלנו (בגרסת הילוך מהיר).",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 619,
+                        "content": "לרוץ למטבח ולהביא לי כוס מים.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 620,
+                        "content": "ללקק לי את האוזן (כן, שמעת נכון).",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 621,
+                        "content": "להגיד את האלף-בית מהסוף להתחלה (תנסה!).",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 622,
+                        "content": "לעשות לייק ל-5 תמונות שלי ברצף באינסטגרם.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 623,
+                        "content": "להזמין לנו צ'ייסר/משקה מהברמן.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 624,
+                        "content": "למצוא שיר ששנינו אוהבים ולשים אותו בפליי.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    },
+                    {
+                        "id": 625,
+                        "content": "להגיד לי \"אני אוהב/ת אותך\" ב-3 שפות שונות.",
+                        "level": "all",
+                        "gender": "unisex",
+                        "type": "task"
+                    }
+                ],
+                "lotto": {
+                    "actions": ["נשיקה ב...", "ליטוף ב...", "נשיפה ב..."],
+                    "parts": ["צוואר", "אוזן", "כף יד"]
+                }
+            };
+
+            // Hide loading, show LANDING (not home)
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('landing-screen').classList.remove('hidden');
+                document.getElementById('landing-screen').classList.add('flex'); // Enable flex layout
+            }, 500);
+        }
+
+        function getRandom(arr) {
+            if (!arr || arr.length === 0) return null;
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function setLevel(level, btn) {
+            currentLevel = level;
+            document.querySelectorAll('.level-btn').forEach(b => {
+                b.className = 'level-btn flex-1 py-2 text-sm font-bold text-white/40 transition-all rounded-full hover:text-white/70';
+            });
+            btn.className = 'level-btn flex-1 py-2 text-sm font-bold active-pill rounded-full transition-all text-black shadow-[0_0_15px_rgba(255,215,0,0.4)]';
+            spawnSparkles(btn.offsetLeft + btn.offsetWidth / 2, btn.offsetTop + btn.offsetHeight / 2, 10);
+        }
+
+        function openGame(game) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(game + '-screen');
+            if (target) {
+                target.classList.add('active');
+                if (game === 'dice') initDice();
+                if (game === 'cards') nextCard();
+                if (game === 'thisthat') nextThisThat();
+                if (game === 'timer') resetTimer();
+            }
+        }
+
+        function goHome() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('home-screen').classList.add('active');
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        // DICE LOGIC
+        function initDice() {
+            const cube = document.getElementById('cube');
+            const faces = [
+                { rot: 'rotateY(0deg)', text: 'גבר אמת', type: 'truth', gender: 'male' },
+                { rot: 'rotateY(180deg)', text: 'אשה אמת', type: 'truth', gender: 'female' },
+                { rot: 'rotateY(90deg)', text: 'גבר חובה', type: 'dare', gender: 'male' },
+                { rot: 'rotateY(-90deg)', text: 'אשה חובה', type: 'dare', gender: 'female' },
+                { rot: 'rotateX(90deg)', text: 'אמת', type: 'truth', gender: 'unisex' },
+                { rot: 'rotateX(-90deg)', text: 'חובה', type: 'dare', gender: 'unisex' }
+            ];
+            cube.innerHTML = faces.map(f => `
+                <div class="dice-face absolute w-full h-full flex items-center justify-center text-center p-2 font-black rounded-3xl text-xl text-brand-neonBlue border border-brand-neonBlue/50 shadow-[0_0_15px_rgba(0,243,255,0.2) inset]" 
+                     style="transform:${f.rot} translateZ(96px); background: rgba(5,5,16,0.95);" 
+                     data-type="${f.type}" data-gender="${f.gender}">${f.text}</div>`).join('');
+        }
+
+        function rollDice() {
+            const resCard = document.getElementById('dice-result');
+            const resText = document.getElementById('dice-text');
+            const cube = document.getElementById('cube');
+
+            cube.style.transform = `rotateX(${Math.floor(Math.random() * 8 + 8) * 90}deg) rotateY(${Math.floor(Math.random() * 8 + 8) * 90}deg)`;
+            resCard.style.opacity = '0';
+
+            setTimeout(() => {
+                const list = gameData.cube.filter(m => m.level === currentLevel || m.level === 'all');
+                const item = getRandom(list);
+                resText.innerText = item ? item.content : "אין משימות";
+                resCard.style.opacity = '1';
+                spawnSparkles(window.innerWidth / 2, window.innerHeight / 3, 30);
+            }, 2000);
+        }
+
+        // CARDS LOGIC
+        function nextCard() {
+            if (!gameData) return;
+            const content = document.getElementById('card-content');
+            const label = document.getElementById('card-level-label');
+            label.innerText = currentLevel.toUpperCase();
+
+            // Filters cards where level matches UI or is set to 'all'
+            const list = gameData.cards.filter(c => c.level === currentLevel || c.level === 'all');
+            const item = getRandom(list);
+
+            content.innerText = item ? item.content : "חסר תוכן ברמה זו";
+            spawnSparkles(window.innerWidth / 2, window.innerHeight / 2, 15);
+        }
+
+        // THIS THAT LOGIC
+        function nextThisThat() {
+            if (!gameData || !gameData.this_or_that.length) return;
+            const item = getRandom(gameData.this_or_that);
+            const d1 = document.getElementById('tt-1');
+            const d2 = document.getElementById('tt-2');
+            d1.style.backgroundImage = `url(${item.img1})`;
+            d1.querySelector('h2').innerText = item.opt1;
+            d2.style.backgroundImage = `url(${item.img2})`;
+            d2.querySelector('h2').innerText = item.opt2;
+        }
+
+        // TIMER LOGIC
+        function startTimer() {
+            const display = document.getElementById('timer-display');
+            const ring = document.getElementById('timer-ring');
+            const mission = document.getElementById('timer-mission');
+            const btn = document.getElementById('timer-btn');
+
+            const item = getRandom(gameData.timer_missions);
+            mission.innerText = item ? item.content : "בצעו משימה!";
+            mission.style.opacity = '1';
+
+            let left = 30;
+            btn.disabled = true;
+            timerInterval = setInterval(() => {
+                left--;
+                display.innerText = left;
+                ring.style.strokeDashoffset = 800 - (left / 30 * 800);
+                if (left <= 0) {
+                    clearInterval(timerInterval);
+                    btn.disabled = false;
+                    display.innerText = "🔥";
+                    spawnSparkles(window.innerWidth / 2, window.innerHeight / 3, 40);
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('timer-display').innerText = "30";
+            document.getElementById('timer-ring').style.strokeDashoffset = "800";
+            document.getElementById('timer-mission').style.opacity = "0";
+            document.getElementById('timer-btn').disabled = false;
+        }
+
+        // LOTTO LOGIC
+        function spinLotto() {
+            const s1 = document.getElementById('slot-1');
+            const s2 = document.getElementById('slot-2');
+            let i = 0;
+            const interval = setInterval(() => {
+                s1.innerText = getRandom(gameData.lotto.actions);
+                s2.innerText = getRandom(gameData.lotto.parts);
+                i++;
+                if (i > 15) {
+                    clearInterval(interval);
+                    spawnSparkles(window.innerWidth / 2, window.innerHeight / 2, 40);
+                }
+            }, 80);
+        }
+
+        function spawnSparkles(x, y, amount) {
+            for (let i = 0; i < amount; i++) {
+                const s = document.createElement('div');
+                s.className = 'sparkle';
+                s.style.left = x + 'px'; s.style.top = y + 'px';
+                const size = Math.random() * 5 + 2;
+                s.style.width = size + 'px'; s.style.height = size + 'px';
+                s.style.backgroundColor = Math.random() > 0.5 ? '#00f3ff' : '#ff00ff';
+                document.body.appendChild(s);
+                const tx = (Math.random() - 0.5) * 200;
+                const ty = (Math.random() - 0.5) * 200;
+                s.animate([{ transform: 'translate(0,0) scale(1)', opacity: 1 }, { transform: `translate(${tx}px,${ty}px) scale(0)`, opacity: 0 }], { duration: 1000 });
+                setTimeout(() => s.remove(), 1000);
+            }
+        }
+
+        loadGameContent();
+    </script>
+</body>
+
+</html>
