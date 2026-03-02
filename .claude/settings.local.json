@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"/c/Users/גיל/Documents/G.T.APPS\" status)",
+      "Bash(git -C \"C:/Users/גיל/Documents/G.T.APPS\" status)",
+      "Bash(git init \"C:/Users/גיל/Documents/G.T.APPS\")"
+    ]
+  }
+}
