@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel — דייט או חובה</title>
+
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Heebo', 'sans-serif'] },
+                    colors: { brand: { deep: '#050510', neonBlue: '#00f3ff', neonPink: '#ff00ff', purple: '#9d00ff' } }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050510;
+            color: white;
+            font-family: 'Heebo', sans-serif;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .neon-blue { color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.7); }
+        .neon-pink { color: #ff00ff; text-shadow: 0 0 10px rgba(255, 0, 255, 0.7); }
+
+        .btn-neon {
+            background: transparent;
+            border: 1px solid #00f3ff;
+            color: #00f3ff;
+            transition: all 0.2s;
+        }
+        .btn-neon:hover {
+            background: #00f3ff;
+            color: black;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
+        }
+
+        .btn-pink {
+            background: transparent;
+            border: 1px solid #ff00ff;
+            color: #ff00ff;
+            transition: all 0.2s;
+        }
+        .btn-pink:hover {
+            background: #ff00ff;
+            color: black;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
+        }
+
+        .btn-danger {
+            background: transparent;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            transition: all 0.2s;
+        }
+        .btn-danger:hover { background: #ff4444; color: white; }
+
+        .filter-active {
+            background: #00f3ff !important;
+            color: black !important;
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.5);
+            border-color: #00f3ff !important;
+        }
+
+        .card-truth { border-color: rgba(0, 243, 255, 0.25); }
+        .card-dare  { border-color: rgba(255, 0, 255, 0.25); }
+
+        input, textarea, select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            border-radius: 8px;
+            padding: 8px 12px;
+            width: 100%;
+            outline: none;
+            font-family: 'Heebo', sans-serif;
+            font-size: 14px;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: #00f3ff;
+            box-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+        }
+        select option { background: #0a0a1a; }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+
+        .tag-truth   { background: rgba(0, 243, 255, 0.12); color: #00f3ff; }
+        .tag-dare    { background: rgba(255, 0, 255, 0.12); color: #ff00ff; }
+        .tag-male    { background: rgba(0, 120, 255, 0.12); color: #5599ff; }
+        .tag-female  { background: rgba(255, 100, 150, 0.12); color: #ff6699; }
+        .tag-unisex  { background: rgba(157, 0, 255, 0.12); color: #cc66ff; }
+
+        .question-row { transition: background 0.15s; }
+        .question-row:hover { background: rgba(255, 255, 255, 0.025); }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #050510; }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.2); border-radius: 3px; }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 243, 255, 0.15);
+            border: 1px solid rgba(0, 243, 255, 0.4);
+            color: #00f3ff;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.3s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-5xl mx-auto">
+
+        <!-- Header -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+            <div>
+                <h1 class="text-3xl font-black neon-blue">⚙️ Admin Panel</h1>
+                <p class="text-white/30 text-sm mt-1">דייט או חובה — ניהול תוכן</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="document.getElementById('fileInput').click()"
+                    class="btn-neon rounded-lg px-4 py-2 text-sm font-bold flex items-center gap-2">
+                    <i class="fa fa-upload"></i> טעינת JSON
+                </button>
+                <input type="file" id="fileInput" accept=".json" class="hidden" onchange="loadFile(event)">
+                <button onclick="exportJSON()"
+                    class="btn-pink rounded-lg px-4 py-2 text-sm font-bold flex items-center gap-2">
+                    <i class="fa fa-download"></i> הורד JSON
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div id="statsBar" class="glass rounded-2xl p-5 mb-5 hidden">
+            <div class="flex flex-wrap gap-6 text-center">
+                <div><div id="statTotal"  class="text-2xl font-black neon-blue">0</div><div class="text-xs text-white/40 mt-0.5">סה"כ</div></div>
+                <div><div id="statTruth"  class="text-2xl font-black" style="color:#00f3ff">0</div><div class="text-xs text-white/40 mt-0.5">אמת</div></div>
+                <div><div id="statDare"   class="text-2xl font-black" style="color:#ff00ff">0</div><div class="text-xs text-white/40 mt-0.5">אומץ</div></div>
+                <div><div id="statUnisex" class="text-2xl font-black" style="color:#cc66ff">0</div><div class="text-xs text-white/40 mt-0.5">Unisex</div></div>
+                <div><div id="statMale"   class="text-2xl font-black" style="color:#5599ff">0</div><div class="text-xs text-white/40 mt-0.5">זכר</div></div>
+                <div><div id="statFemale" class="text-2xl font-black" style="color:#ff6699">0</div><div class="text-xs text-white/40 mt-0.5">נקבה</div></div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div id="controlBar" class="glass rounded-2xl p-4 mb-4 hidden">
+            <div class="flex flex-wrap items-center gap-3">
+                <span class="text-white/40 text-sm">סינון:</span>
+                <div class="flex gap-2 flex-wrap">
+                    <button onclick="setFilter('type','all')"    id="f-type-all"    class="filter-btn rounded-full px-3 py-1 text-sm border border-white/20 filter-active" data-group="type">הכל</button>
+                    <button onclick="setFilter('type','truth')"  id="f-type-truth"  class="filter-btn rounded-full px-3 py-1 text-sm border border-white/20" data-group="type">💬 אמת</button>
+                    <button onclick="setFilter('type','dare')"   id="f-type-dare"   class="filter-btn rounded-full px-3 py-1 text-sm border border-white/20" data-group="type">⚡ אומץ</button>
+                </div>
+                <div class="w-px h-5 bg-white/20 hidden sm:block"></div>
+                <div class="flex gap-2 flex-wrap">
+                    <button onclick="setFilter('gender','all')"    id="f-gender-all"    class="filter-btn rounded-full px-3 py-1 text-sm border border-white/20 filter-active" data-group="gender">כולם</button>
+                    <button onclick="setFilter('gender','unisex')" id="f-gender-unisex" class="filter-btn rounded-full px-3 py-1 text-sm border border-white/20" data-group="gender">⚥ Unisex</button>
+                    <button onclick="setFilter('gender','male')"   id="f-gender-male"   class="filter-btn rounded-full px-3 py-1 text-sm border border-white/20" data-group="gender">♂ זכר</button>
+                    <button onclick="setFilter('gender','female')" id="f-gender-female" class="filter-btn rounded-full px-3 py-1 text-sm border border-white/20" data-group="gender">♀ נקבה</button>
+                </div>
+                <div class="flex-1"></div>
+                <button onclick="openAddModal()"
+                    class="btn-neon rounded-lg px-4 py-2 text-sm font-bold flex items-center gap-2">
+                    <i class="fa fa-plus"></i> שאלה חדשה
+                </button>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="glass rounded-2xl p-16 text-center">
+            <div class="text-6xl mb-4">📂</div>
+            <h2 class="text-xl font-bold text-white/50 mb-2">טען קובץ JSON להתחיל</h2>
+            <p class="text-white/25 text-sm mb-6">לחץ על "טעינת JSON" ובחר את gamecontent.json שלך</p>
+            <button onclick="document.getElementById('fileInput').click()"
+                class="btn-neon rounded-xl px-6 py-3 font-bold">
+                <i class="fa fa-upload ml-2"></i> בחר קובץ
+            </button>
+        </div>
+
+        <!-- Questions List -->
+        <div id="questionsList" class="hidden space-y-2"></div>
+
+    </div>
+
+    <!-- Add / Edit Modal -->
+    <div id="modal" class="modal-overlay hidden">
+        <div class="glass rounded-2xl p-6 w-full max-w-lg mx-4" style="border:1px solid rgba(0,243,255,0.2)">
+            <h2 id="modalTitle" class="text-xl font-black neon-blue mb-6">שאלה חדשה</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-white/40 text-xs mb-1.5 block">תוכן השאלה / אתגר</label>
+                    <textarea id="editContent" rows="3" placeholder="הכנס את תוכן השאלה..."></textarea>
+                </div>
+                <div class="flex gap-3">
+                    <div class="flex-1">
+                        <label class="text-white/40 text-xs mb-1.5 block">סוג</label>
+                        <select id="editType">
+                            <option value="truth">💬 אמת (Truth)</option>
+                            <option value="dare">⚡ אומץ (Dare)</option>
+                        </select>
+                    </div>
+                    <div class="flex-1">
+                        <label class="text-white/40 text-xs mb-1.5 block">מגדר</label>
+                        <select id="editGender">
+                            <option value="unisex">⚥ Unisex</option>
+                            <option value="male">♂ זכר</option>
+                            <option value="female">♀ נקבה</option>
+                        </select>
+                    </div>
+                    <div class="flex-1">
+                        <label class="text-white/40 text-xs mb-1.5 block">רמה</label>
+                        <select id="editLevel">
+                            <option value="all">all</option>
+                            <option value="hot">hot</option>
+                            <option value="deep">deep</option>
+                            <option value="wild">wild</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="saveModal()" class="btn-neon rounded-lg px-5 py-2.5 font-bold flex-1">שמור</button>
+                <button onclick="closeModal()" class="rounded-lg px-5 py-2.5 font-bold border border-white/15 text-white/50 hover:border-white/30 hover:text-white/70 transition-colors">ביטול</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div id="confirmModal" class="modal-overlay hidden">
+        <div class="glass rounded-2xl p-6 w-full max-w-sm mx-4 text-center" style="border:1px solid rgba(255,68,68,0.3)">
+            <div class="text-4xl mb-3">🗑️</div>
+            <h2 class="text-lg font-black mb-2">למחוק את השאלה?</h2>
+            <p id="confirmText" class="text-white/35 text-sm mb-6 leading-relaxed"></p>
+            <div class="flex gap-3">
+                <button onclick="confirmDelete()" class="btn-danger rounded-lg px-5 py-2.5 font-bold flex-1">מחק</button>
+                <button onclick="closeConfirm()" class="rounded-lg px-5 py-2.5 font-bold border border-white/15 text-white/50 hover:border-white/30 transition-colors flex-1">ביטול</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let data = null;
+        let filters = { type: 'all', gender: 'all' };
+        let editingId = null;
+        let deletingId = null;
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (!parsed.cube || !Array.isArray(parsed.cube)) throw new Error('המפתח "cube" חסר או לא תקין');
+                    data = parsed;
+                    renderAll();
+                    showToast(`נטענו ${data.cube.length} שאלות בהצלחה ✓`);
+                } catch (err) {
+                    alert('שגיאה בטעינת הקובץ:\n' + err.message);
+                }
+            };
+            reader.readAsText(file, 'UTF-8');
+            event.target.value = '';
+        }
+
+        function renderAll() {
+            updateStats();
+            renderList();
+            document.getElementById('statsBar').classList.remove('hidden');
+            document.getElementById('controlBar').classList.remove('hidden');
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('questionsList').classList.remove('hidden');
+        }
+
+        function updateStats() {
+            const items = data.cube;
+            document.getElementById('statTotal').textContent  = items.length;
+            document.getElementById('statTruth').textContent  = items.filter(x => x.type === 'truth').length;
+            document.getElementById('statDare').textContent   = items.filter(x => x.type === 'dare').length;
+            document.getElementById('statUnisex').textContent = items.filter(x => x.gender === 'unisex').length;
+            document.getElementById('statMale').textContent   = items.filter(x => x.gender === 'male').length;
+            document.getElementById('statFemale').textContent = items.filter(x => x.gender === 'female').length;
+        }
+
+        function renderList() {
+            const list = document.getElementById('questionsList');
+            let items = data.cube;
+            if (filters.type !== 'all')   items = items.filter(x => x.type === filters.type);
+            if (filters.gender !== 'all') items = items.filter(x => x.gender === filters.gender);
+
+            if (items.length === 0) {
+                list.innerHTML = '<div class="glass rounded-xl p-10 text-center text-white/30">אין שאלות התואמות לסינון</div>';
+                return;
+            }
+
+            list.innerHTML = items.map(q => `
+                <div class="question-row glass rounded-xl p-4 border ${q.type === 'truth' ? 'card-truth' : 'card-dare'}">
+                    <div class="flex items-start gap-3">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-wrap gap-1.5 mb-2">
+                                <span class="tag-${q.type} text-xs px-2 py-0.5 rounded-full font-bold">${q.type === 'truth' ? '💬 אמת' : '⚡ אומץ'}</span>
+                                <span class="tag-${q.gender} text-xs px-2 py-0.5 rounded-full">${genderLabel(q.gender)}</span>
+                                ${q.level !== 'all' ? `<span class="text-xs px-2 py-0.5 rounded-full bg-white/8 text-white/40">${q.level}</span>` : ''}
+                                <span class="text-xs text-white/15 mr-1">#${q.id}</span>
+                            </div>
+                            <p class="text-white/85 text-sm leading-relaxed">${escapeHtml(q.content)}</p>
+                        </div>
+                        <div class="flex gap-1 shrink-0">
+                            <button onclick="openEditModal(${q.id})"
+                                class="text-white/25 hover:text-cyan-400 transition-colors p-2 rounded-lg hover:bg-cyan-400/10" title="עריכה">
+                                <i class="fa fa-pen text-xs"></i>
+                            </button>
+                            <button onclick="openDeleteConfirm(${q.id})"
+                                class="text-white/25 hover:text-red-400 transition-colors p-2 rounded-lg hover:bg-red-400/10" title="מחיקה">
+                                <i class="fa fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function genderLabel(g) {
+            if (g === 'male')   return '♂ זכר';
+            if (g === 'female') return '♀ נקבה';
+            return '⚥ Unisex';
+        }
+
+        function escapeHtml(str) {
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function setFilter(group, value) {
+            filters[group] = value;
+            document.querySelectorAll(`.filter-btn[data-group="${group}"]`).forEach(btn => {
+                btn.classList.remove('filter-active');
+            });
+            document.getElementById(`f-${group}-${value}`).classList.add('filter-active');
+            renderList();
+        }
+
+        function openAddModal() {
+            editingId = null;
+            document.getElementById('modalTitle').textContent = '✨ שאלה חדשה';
+            document.getElementById('editContent').value = '';
+            document.getElementById('editType').value   = 'truth';
+            document.getElementById('editGender').value = 'unisex';
+            document.getElementById('editLevel').value  = 'all';
+            document.getElementById('modal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('editContent').focus(), 50);
+        }
+
+        function openEditModal(id) {
+            const q = data.cube.find(x => x.id === id);
+            if (!q) return;
+            editingId = id;
+            document.getElementById('modalTitle').textContent = '✏️ עריכת שאלה';
+            document.getElementById('editContent').value = q.content;
+            document.getElementById('editType').value   = q.type;
+            document.getElementById('editGender').value = q.gender;
+            document.getElementById('editLevel').value  = q.level;
+            document.getElementById('modal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('editContent').focus(), 50);
+        }
+
+        function saveModal() {
+            const content = document.getElementById('editContent').value.trim();
+            if (!content) { alert('יש להזין תוכן לשאלה'); return; }
+
+            if (editingId !== null) {
+                const q = data.cube.find(x => x.id === editingId);
+                q.content = content;
+                q.type    = document.getElementById('editType').value;
+                q.gender  = document.getElementById('editGender').value;
+                q.level   = document.getElementById('editLevel').value;
+                showToast('שאלה עודכנה ✓');
+            } else {
+                const maxId = data.cube.length > 0 ? Math.max(...data.cube.map(x => x.id)) : 500;
+                data.cube.push({
+                    id:      maxId + 1,
+                    type:    document.getElementById('editType').value,
+                    content: content,
+                    level:   document.getElementById('editLevel').value,
+                    gender:  document.getElementById('editGender').value
+                });
+                showToast('שאלה נוספה ✓');
+            }
+
+            closeModal();
+            renderAll();
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            editingId = null;
+        }
+
+        function openDeleteConfirm(id) {
+            const q = data.cube.find(x => x.id === id);
+            if (!q) return;
+            deletingId = id;
+            const preview = q.content.length > 70 ? q.content.slice(0, 70) + '...' : q.content;
+            document.getElementById('confirmText').textContent = preview;
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        function confirmDelete() {
+            data.cube = data.cube.filter(x => x.id !== deletingId);
+            closeConfirm();
+            renderAll();
+            showToast('שאלה נמחקה');
+        }
+
+        function closeConfirm() {
+            document.getElementById('confirmModal').classList.add('hidden');
+            deletingId = null;
+        }
+
+        function exportJSON() {
+            if (!data) { alert('אין נתונים לייצוא. טעינת JSON קודם.'); return; }
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = 'gamecontent.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('הקובץ הורד בהצלחה ✓');
+        }
+
+        function showToast(msg) {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+            const el = document.createElement('div');
+            el.className = 'toast';
+            el.textContent = msg;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 2500);
+        }
+
+        // Close modals on backdrop click
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        document.getElementById('confirmModal').addEventListener('click', function(e) {
+            if (e.target === this) closeConfirm();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') { closeModal(); closeConfirm(); }
+        });
+    </script>
+</body>
+</html>

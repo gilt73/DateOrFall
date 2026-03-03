@@ -17,21 +17,14 @@
     {
       "id": 503,
       "type": "dare",
-      "content": "תני לי את המבט שאת עושה כשאת רוצה משהו מאוד.",
+      "content": "תני לי את המבט שאת עושה כשאת רוצה משהו בטירוף.",
       "level": "all",
       "gender": "female"
     },
     {
-      "id": 504,
-      "type": "truth",
-      "content": "כמה כסף הוצאת על הדייט הזה (כולל בגדים/הכנות) לפני שהגעת?",
-      "level": "all",
-      "gender": "unisex"
-    },
-    {
       "id": 505,
       "type": "dare",
-      "content": "דבר במבטא צרפתי ב-3 התורות הבאים.",
+      "content": "דבר\\י במבטא צרפתי ב-3 התורים הבאים.",
       "level": "all",
       "gender": "unisex"
     },
@@ -48,13 +41,6 @@
       "content": "שלח הודעה קולית לאח/אחות שלך ותגיד להם שאתה מאוהב (בצחוק).",
       "level": "all",
       "gender": "male"
-    },
-    {
-      "id": 508,
-      "type": "truth",
-      "content": "אם היינו נכנסים להריון הערב (בטעות), איך היית מגיבה?",
-      "level": "all",
-      "gender": "female"
     },
     {
       "id": 509,
@@ -74,21 +60,21 @@
       "id": 511,
       "type": "truth",
       "content": "מה הפנטזיה המינית שאתה מתבייש לבקש ממני?",
-      "level": "all",
+      "level": "hot",
       "gender": "male"
     },
     {
       "id": 512,
       "type": "truth",
-      "content": "מתי בפעם האחרונה הרגשת שאני לוקח/ת אותך כמובן מאליו?",
-      "level": "all",
+      "content": "מתי בפעם האחרונה הרגשת שאני לוקח\\ת אותך כמובן מאליו?",
+      "level": "wild",
       "gender": "unisex"
     },
     {
       "id": 513,
       "type": "dare",
-      "content": "נשק אותי כאילו אנחנו בסרט הוליוודי (עם הטיה לאחור).",
-      "level": "all",
+      "content": "נשק\\י אותי כאילו אנחנו בסרט הוליוודי (עם הטיה לאחור).",
+      "level": "hot",
       "gender": "unisex"
     },
     {
@@ -106,24 +92,17 @@
       "gender": "unisex"
     },
     {
-      "id": 516,
-      "type": "dare",
-      "content": "תעמוד על הכיסא ותכריז \"אני המלך/מלכה של הדייט הזה!\".",
-      "level": "all",
-      "gender": "unisex"
-    },
-    {
       "id": 517,
       "type": "truth",
       "content": "האם אי פעם חיטטת לי בטלפון כשישנתי/התקלחתי?",
-      "level": "all",
+      "level": "hot",
       "gender": "unisex"
     },
     {
       "id": 518,
       "type": "dare",
       "content": "תניח את היד על הירך שלי למשך כל הסיבוב הבא.",
-      "level": "all",
+      "level": "hot",
       "gender": "male"
     },
     {
@@ -143,7 +122,7 @@
     {
       "id": 521,
       "type": "truth",
-      "content": "אם היית צריך לבחור: סקס כל יום או אוכל גורמה כל יום?",
+      "content": "אם היית צריך\\ה לבחור: סקס כל יום או אוכל גורמה כל יום?",
       "level": "all",
       "gender": "unisex"
     },
@@ -157,7 +136,7 @@
     {
       "id": 523,
       "type": "truth",
-      "content": "מה הדבר היחיד שתציל מהבית אם תהיה שריפה (חוץ ממני ומהילדים)?",
+      "content": "מה הדבר היחיד שתציל\\י מהבית אם תהיה שריפה (חוץ ממני ומהילדים)?",
       "level": "all",
       "gender": "unisex"
     },
@@ -185,7 +164,7 @@
     {
       "id": 527,
       "type": "truth",
-      "content": "האם היית יוצא איתי אם הייתי נמוך/ה ב-10 ס\"מ?",
+      "content": "האם היית יוצא\\ת איתי אם הייתי נמוך\\ה ב-10 ס\"מ?",
       "level": "all",
       "gender": "unisex"
     },
@@ -199,7 +178,7 @@
     {
       "id": 529,
       "type": "truth",
-      "content": "איזה הרגל שלי את/ה שונא/ת בסתר?",
+      "content": "איזה הרגל שלי את\\ה שונא\\ת בסתר?",
       "level": "all",
       "gender": "unisex"
     },
@@ -215,7 +194,7 @@
     {
       "id": 101,
       "type": "truth",
-      "content": "מה ה\"עובדה המיותרת\" שאתה יודע ואף אחד לא צריך לדעת?",
+      "content": "מה ה\"עובדה המיותרת\" שאת\\ה יודע\\ת ואף אחד לא צריך לדעת?",
       "level": "all",
       "gender": "unisex"
     },
@@ -236,14 +215,14 @@
     {
       "id": 104,
       "type": "truth",
-      "content": "איזה שיר אתה שומע באוטו כשאתה לבד ומתבייש שמישהו ידע?",
+      "content": "איזה שיר את\\ה שומע\\ת באוטו כשאת\\ה לבד ומתבייש\\ת שמישהו ידע?",
       "level": "all",
       "gender": "unisex"
     },
     {
       "id": 105,
       "type": "truth",
-      "content": "דרג את כישורי הנהיגה שלך מ-1 עד 10, ואני אגיד לך מה זה אומר עליך.",
+      "content": "דרג\\י את כישורי הנהיגה שלך מ-1 עד 10, ואני אגיד לך מה זה אומר עליך.",
       "level": "all",
       "gender": "unisex"
     },
@@ -257,7 +236,7 @@
     {
       "id": 107,
       "type": "truth",
-      "content": "מה הדבר האחד שאתה פוחד לשאול אותי כי אתה חושש מהתשובה?",
+      "content": "מה הדבר האחד שאת\\ה פוחד\\ת לשאול אותי כי את\\ה חושש\\ת מהתשובה?",
       "level": "all",
       "gender": "unisex"
     },
@@ -292,7 +271,7 @@
     {
       "id": 112,
       "type": "truth",
-      "content": "אם היינו נפגשים היום בפעם הראשונה (בגרסה הנוכחית שלנו), הייתי מתחיל איתך?",
+      "content": "אם היינו נפגשים היום בפעם הראשונה (בגרסה הנוכחית שלנו), הייתי מתחיל\\ה איתך?",
       "level": "all",
       "gender": "unisex"
     },
@@ -306,42 +285,42 @@
     {
       "id": 114,
       "type": "truth",
-      "content": "אם היית צריך להחליף את המשפחה שלי במשפחה של סדרת טלוויזיה, במי היית בוחר?",
+      "content": "אם היית צריך\\ה להחליף את המשפחה שלי במשפחה של סדרת טלוויזיה, במי היית בוחר\\ת?",
       "level": "all",
       "gender": "unisex"
     },
     {
       "id": 115,
       "type": "truth",
-      "content": "מה הזיכרון המשותף שלנו שאתה הכי רוצה לשמור לעת זקנה?",
+      "content": "מה הזיכרון המשותף שלנו שאת\\ה הכי רוצה לשמור לעת זקנה?",
       "level": "all",
       "gender": "unisex"
     },
     {
       "id": 201,
       "type": "dare",
-      "content": "דבר כמו פרשן כדורגל נלהב ב-2 הדקות הקרובות.",
+      "content": "דבר\\י כמו פרשן כדורגל נלהב ב-2 הדקות הקרובות.",
       "level": "all",
       "gender": "unisex"
     },
     {
       "id": 202,
       "type": "dare",
-      "content": "תעשה חיקוי של איך אני נראה/ית כשאני כועס/ת.",
+      "content": "תעשה\\י חיקוי של איך אני נראה\\ית כשאני כועס\\ת.",
       "level": "all",
       "gender": "unisex"
     },
     {
       "id": 203,
       "type": "dare",
-      "content": "תן לי לראות את ה\"פתקים\" (Notes) בטלפון שלך.",
+      "content": "תן\\י לי לראות את ה\"פתקים\" (Notes) בטלפון שלך.",
       "level": "all",
       "gender": "unisex"
     },
     {
       "id": 204,
       "type": "dare",
-      "content": "שים שיר רומנטי בטלפון והזמן אותי לסלואו צמוד באמצע הסלון/רחוב.",
+      "content": "שים\\י שיר רומנטי בטלפון והזמן\\י אותי לסלואו צמוד באמצע הסלון/רחוב.",
       "level": "all",
       "gender": "unisex"
     },
@@ -355,60 +334,90 @@
     {
       "id": 206,
       "type": "dare",
-      "content": "תתקשר לאמא שלך וספר לה כמה אני מדהים/ה (בלי להסביר למה).",
+      "content": "תתקשר\\י לאמא שלך וספר\\י לה כמה אני מדהים\\ה (בלי להסביר למה).",
       "level": "all",
       "gender": "unisex"
     },
     {
       "id": 207,
       "type": "dare",
-      "content": "תעצום עיניים, אני נותן לך לטעום משהו מהמקרר. תנחש מה זה.",
+      "content": "תעצום\\י עיניים, אני נותן\\ת לך לטעום משהו מהמקרר. תנחש\\י מה זה.",
       "level": "all",
       "gender": "unisex"
     },
     {
       "id": 208,
       "type": "dare",
-      "content": "שחזר את הנשיקה הראשונה שלנו. בדיוק כמו שהייתה (כולל המבוכה).",
+      "content": "שחזר\\י את הנשיקה הראשונה שלנו. בדיוק כמו שהייתה (כולל המבוכה).",
       "level": "all",
       "gender": "unisex"
     },
     {
       "id": 209,
       "type": "dare",
-      "content": "תעשה לי \"שק קמח\" לחדר השינה/למכונית.",
+      "content": "תעשה\\י לי \"שק קמח\" לחדר השינה/למכונית.",
       "level": "all",
       "gender": "unisex"
     },
     {
       "id": 210,
       "type": "dare",
-      "content": "תמצא תמונה שלנו מלפני 3 שנים ותחקה את הפוזה עכשיו.",
+      "content": "תמצא\\י תמונה שלנו מלפני 3 שנים ותחקה\\י את הפוזה עכשיו.",
       "level": "all",
       "gender": "unisex"
     },
     {
       "id": 211,
       "type": "dare",
-      "content": "תכתוב לי מכתב אהבה קצר (3 משפטים) על נייר טואלט ותקריא אותו דרמטית.",
+      "content": "תכתוב\\י לי מכתב אהבה קצר (3 משפטים) על נייר טואלט ותקריא\\י אותו דרמטית.",
       "level": "all",
       "gender": "unisex"
     },
     {
       "id": 212,
       "type": "dare",
-      "content": "תנסה ללקק את המרפק שלך.",
+      "content": "תנסה\\י ללקק את המרפק שלך.",
       "level": "all",
       "gender": "unisex"
     }
   ],
- "this_or_that": [
-    { "opt1": "סושי", "opt2": "פיצה", "img1": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c", "img2": "https://images.unsplash.com/photo-1513104890138-7c749659a591" },
-    { "opt1": "בטן גב", "opt2": "טיול בעיר", "img1": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e", "img2": "https://images.unsplash.com/photo-1449824913935-59a10b8d2000" },
-    { "opt1": "סרט בבית", "opt2": "מסיבה", "img1": "https://images.unsplash.com/photo-1536440136628-849c177e76a1", "img2": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30" },
-    { "opt1": "מתוק", "opt2": "מלוח", "img1": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e", "img2": "https://images.unsplash.com/photo-1518977676601-b53f82aba655" },
-    { "opt1": "ספונטני", "opt2": "מתוכנן", "img1": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800", "img2": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b" },
-    { "opt1": "זריחה", "opt2": "שקיעה", "img1": "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8", "img2": "https://images.unsplash.com/photo-1472214103451-9374bd1c798e" }
+  "this_or_that": [
+    {
+      "opt1": "סושי",
+      "opt2": "פיצה",
+      "img1": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c",
+      "img2": "https://images.unsplash.com/photo-1513104890138-7c749659a591"
+    },
+    {
+      "opt1": "בטן גב",
+      "opt2": "טיול בעיר",
+      "img1": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+      "img2": "https://images.unsplash.com/photo-1449824913935-59a10b8d2000"
+    },
+    {
+      "opt1": "סרט בבית",
+      "opt2": "מסיבה",
+      "img1": "https://images.unsplash.com/photo-1536440136628-849c177e76a1",
+      "img2": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30"
+    },
+    {
+      "opt1": "מתוק",
+      "opt2": "מלוח",
+      "img1": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e",
+      "img2": "https://images.unsplash.com/photo-1518977676601-b53f82aba655"
+    },
+    {
+      "opt1": "ספונטני",
+      "opt2": "מתוכנן",
+      "img1": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800",
+      "img2": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b"
+    },
+    {
+      "opt1": "זריחה",
+      "opt2": "שקיעה",
+      "img1": "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8",
+      "img2": "https://images.unsplash.com/photo-1472214103451-9374bd1c798e"
+    }
   ],
   "timer_missions": [
     {
@@ -581,14 +590,22 @@
     },
     {
       "id": 625,
-      "content": "להגיד לי \"אני אוהב/ת אותך\" ב-3 שפות שונות.",
+      "content": "להגיד לי \"אני אוהב\\ת אותך\" ב-3 שפות שונות.",
       "level": "all",
       "gender": "unisex",
       "type": "task"
     }
   ],
-   "lotto": {
-    "actions": ["נשיקה ב...", "ליטוף ב...", "נשיפה ב..."],
-    "parts": ["צוואר", "אוזן", "כף יד"]
+  "lotto": {
+    "actions": [
+      "נשיקה ב...",
+      "ליטוף ב...",
+      "נשיפה ב..."
+    ],
+    "parts": [
+      "צוואר",
+      "אוזן",
+      "כף יד"
+    ]
   }
 }
