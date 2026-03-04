@@ -157,7 +157,11 @@
                 <h1 class="text-3xl font-black neon-blue">⚙️ Admin Panel</h1>
                 <p class="text-white/30 text-sm mt-1">דייט או חובה — ניהול תוכן</p>
             </div>
-            <div class="flex gap-3">
+            <div class="flex gap-3 flex-wrap">
+                <button onclick="toggleAIPanel()"
+                    class="btn-neon rounded-lg px-4 py-2 text-sm font-bold flex items-center gap-2">
+                    🤖 AI Generator
+                </button>
                 <button onclick="document.getElementById('fileInput').click()"
                     class="btn-neon rounded-lg px-4 py-2 text-sm font-bold flex items-center gap-2">
                     <i class="fa fa-upload"></i> טעינת JSON
@@ -203,6 +207,78 @@
                     class="btn-neon rounded-lg px-4 py-2 text-sm font-bold flex items-center gap-2">
                     <i class="fa fa-plus"></i> שאלה חדשה
                 </button>
+            </div>
+        </div>
+
+        <!-- AI Generator Panel -->
+        <div id="ai-panel" class="hidden mb-4 rounded-2xl p-5" style="background: rgba(0,243,255,0.04); border: 1px solid rgba(0,243,255,0.2);">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="text-sm font-black" style="color:#00f3ff">🤖 מחולל שאלות AI</span>
+                <span class="text-xs text-white/30">— מבוסס Claude Haiku</span>
+            </div>
+            <!-- API Key -->
+            <div class="flex gap-2 mb-1">
+                <input id="api-key-input" type="password" placeholder="Anthropic API Key (sk-ant-...)" style="flex:1">
+                <button onclick="saveApiKey()" class="btn-neon rounded-lg px-4 py-2 text-sm font-bold shrink-0">שמור מפתח</button>
+            </div>
+            <p class="text-white/25 text-xs mb-4">המפתח נשמר רק בדפדפן שלך ולא נשלח לאף שרת חיצוני.</p>
+            <!-- Generation Params -->
+            <div class="grid grid-cols-2 gap-2 mb-3">
+                <div>
+                    <label class="text-white/40 text-xs mb-1 block">כמות שאלות</label>
+                    <select id="gen-count">
+                        <option value="5">5 שאלות</option>
+                        <option value="10" selected>10 שאלות</option>
+                        <option value="15">15 שאלות</option>
+                        <option value="20">20 שאלות</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-white/40 text-xs mb-1 block">סוג</label>
+                    <select id="gen-type">
+                        <option value="mixed" selected>mixed (ערבוב)</option>
+                        <option value="truth">truth (אמת)</option>
+                        <option value="dare">dare (אומץ)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-white/40 text-xs mb-1 block">מגדר</label>
+                    <select id="gen-gender">
+                        <option value="unisex" selected>⚥ Unisex</option>
+                        <option value="male">♂ זכר</option>
+                        <option value="female">♀ נקבה</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-white/40 text-xs mb-1 block">רמה</label>
+                    <select id="gen-level">
+                        <option value="all" selected>all (כולם)</option>
+                        <option value="hot">hot (רומנטי)</option>
+                        <option value="deep">deep (עמוק)</option>
+                        <option value="wild">wild (נועז)</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Optional Theme -->
+            <div class="mb-4">
+                <label class="text-white/40 text-xs mb-1 block">נושא אופציונלי</label>
+                <input id="gen-theme" type="text" placeholder="למשל: ילדות, פחדים, נסיעות, משפחה...">
+            </div>
+            <!-- Generate Button -->
+            <button id="gen-btn" onclick="generateAI()"
+                class="btn-neon rounded-xl px-6 py-3 font-bold w-full text-sm">
+                ✨ צור שאלות
+            </button>
+            <!-- Preview Area -->
+            <div id="ai-preview" class="hidden mt-5">
+                <div class="flex items-center justify-between mb-3">
+                    <p class="text-white/50 text-sm">סקור את השאלות לפני ההוספה:</p>
+                    <button onclick="addAllGenerated()"
+                        class="btn-neon rounded-lg px-4 py-1.5 text-sm font-bold">
+                        + הוסף מסומנות לרשימה
+                    </button>
+                </div>
+                <div id="ai-preview-list" class="space-y-2"></div>
             </div>
         </div>
 
@@ -493,6 +569,145 @@
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') { closeModal(); closeConfirm(); }
+        });
+
+        // ─── AI Generator ────────────────────────────────────────────────────
+        let generatedQuestions = [];
+
+        function toggleAIPanel() {
+            document.getElementById('ai-panel').classList.toggle('hidden');
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('api-key-input').value.trim();
+            if (!key) { showToast('❌ הכנס מפתח תחילה'); return; }
+            try { localStorage.setItem('dof_api_key', key); } catch(e) {}
+            showToast('🔑 מפתח נשמר');
+        }
+
+        async function generateAI() {
+            const apiKey = document.getElementById('api-key-input').value.trim();
+            if (!apiKey) { showToast('❌ הכנס API Key תחילה'); return; }
+            if (!data)   { showToast('❌ טען קובץ JSON תחילה'); return; }
+
+            const count  = document.getElementById('gen-count').value;
+            const type   = document.getElementById('gen-type').value;
+            const gender = document.getElementById('gen-gender').value;
+            const level  = document.getElementById('gen-level').value;
+            const theme  = document.getElementById('gen-theme').value.trim();
+
+            const typeInstruction = type === 'mixed'
+                ? 'ערבוב של truth ו-dare בערך שווה'
+                : `מסוג ${type} בלבד`;
+
+            const prompt = `אתה כותב יצירתי למשחק היכרויות בעברית "דייט או חובה" (Truth or Dare לדייטים).
+צור ${count} שאלות/משימות ייחודיות (${typeInstruction}), לשחקנים ${gender}, ברמת ${level}.${theme ? `\nנושא: ${theme}.` : ''}
+
+כללים חשובים:
+- כתוב בעברית בלבד
+- לשאלות unisex: השתמש בסיומת גבר\\אשה (למשל: "דבר\\י", "ספר\\י", "את\\ה", "הלכת\\הלכת")
+- truth: שאלות אישיות, מעמיקות, חושפות, מעניינות
+- dare: משימות כיפיות, קצת אמיצות, מתאימות לדייט רומנטי
+- all=מתאים לכולם, hot=רומנטי, deep=רגשי/עמוק, wild=נועז יותר
+
+החזר JSON בלבד, ללא הסברים או טקסט נוסף:
+[{"content":"...","type":"truth","gender":"unisex","level":"all"},...]`;
+
+            const btn = document.getElementById('gen-btn');
+            btn.disabled = true;
+            btn.textContent = '⏳ יוצר...';
+
+            try {
+                const res = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'x-api-key': apiKey,
+                        'anthropic-version': '2023-06-01',
+                        'content-type': 'application/json',
+                        'anthropic-dangerous-direct-browser-access': 'true'
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-haiku-4-5-20251001',
+                        max_tokens: 2000,
+                        messages: [{ role: 'user', content: prompt }]
+                    })
+                });
+
+                if (!res.ok) {
+                    const errJson = await res.json().catch(() => ({}));
+                    throw new Error(errJson.error?.message || `שגיאת API: ${res.status}`);
+                }
+
+                const json      = await res.json();
+                const text      = json.content[0].text;
+                const match     = text.match(/\[[\s\S]*\]/);
+                if (!match) throw new Error('Claude לא החזיר JSON תקין');
+                const generated = JSON.parse(match[0]);
+
+                showGeneratedPreview(generated);
+                showToast(`✅ נוצרו ${generated.length} שאלות`);
+            } catch (e) {
+                showToast('❌ ' + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '✨ צור שאלות';
+            }
+        }
+
+        function showGeneratedPreview(questions) {
+            generatedQuestions = questions;
+            const list = document.getElementById('ai-preview-list');
+            list.innerHTML = questions.map((q, i) => `
+                <div class="flex gap-3 items-start p-3 rounded-xl" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06)">
+                    <input type="checkbox" id="gen-check-${i}" checked
+                        class="mt-1 shrink-0" style="accent-color:#00f3ff; width:16px; height:16px; cursor:pointer">
+                    <div class="flex-1 min-w-0">
+                        <textarea id="gen-text-${i}" rows="2"
+                            class="w-full text-sm resize-none"
+                            style="background:transparent; border:none; border-bottom:1px solid rgba(255,255,255,0.08); border-radius:0; padding:0 0 6px 0; outline:none"
+                        >${escapeHtml(q.content)}</textarea>
+                        <div class="flex gap-1 mt-1.5 flex-wrap">
+                            <span class="tag-${q.type} text-xs px-2 py-0.5 rounded-full font-bold">${q.type === 'truth' ? '💬 אמת' : '⚡ אומץ'}</span>
+                            <span class="tag-${q.gender} text-xs px-2 py-0.5 rounded-full">${genderLabel(q.gender)}</span>
+                            <span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(255,215,0,0.1); color:#ffd700">${q.level}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('ai-preview').classList.remove('hidden');
+        }
+
+        function addAllGenerated() {
+            if (!data) { showToast('❌ טען JSON תחילה'); return; }
+            let maxId = data.cube.length ? Math.max(...data.cube.map(x => x.id)) : 500;
+            let added = 0;
+            generatedQuestions.forEach((q, i) => {
+                const cb = document.getElementById(`gen-check-${i}`);
+                const ta = document.getElementById(`gen-text-${i}`);
+                if (cb?.checked) {
+                    maxId++;
+                    data.cube.push({
+                        id:      maxId,
+                        type:    q.type,
+                        content: ta ? ta.value.trim() : q.content,
+                        level:   q.level,
+                        gender:  q.gender
+                    });
+                    added++;
+                }
+            });
+            renderAll();
+            document.getElementById('ai-preview').classList.add('hidden');
+            generatedQuestions = [];
+            showToast(`✅ נוספו ${added} שאלות לרשימה`);
+        }
+
+        // Pre-fill API key from localStorage on load
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const saved = localStorage.getItem('dof_api_key');
+                if (saved) document.getElementById('api-key-input').value = saved;
+            } catch(e) {}
         });
     </script>
 </body>

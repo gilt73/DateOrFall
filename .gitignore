@@ -8,3 +8,9 @@ wild_woman.png
 
 # Archive files
 *.zip
+
+# Other project repos (separate git repos, not part of DateOrFall)
+TruthOrDareKids/
+ShowOff/
+GT-AI-Studio/
+DateOrFall/
