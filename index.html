@@ -11,15 +11,15 @@
 
     <!-- Smart Caching with Version Control -->
     <meta http-equiv="Cache-Control" content="public, max-age=31536000">
-    <meta name="app-version" content="1.0.10">
+    <meta name="app-version" content="2.0.0">
 
     <title>דייט או חובה</title>
     <meta property="og:title" content="דייט או חובה">
     <meta property="og:description" content="המשחק ששבר לדייטים את הקרח">
     <meta name="apple-mobile-web-app-title" content="דייט או חובה">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon.png?v=1.0.10">
-    <link rel="icon" type="image/png" href="icon.png?v=1.0.10">
+    <link rel="apple-touch-icon" href="icon.png?v=2.0.0">
+    <link rel="icon" type="image/png" href="icon.png?v=2.0.0">
 
     <!-- Preconnect to CDNs for faster loading -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
@@ -111,21 +111,31 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .screen.returning {
+            animation: slideDown 0.4s ease-out !important;
+        }
+
         .share-btn {
             background: #25D366;
             color: white;
-            border-radius: 12px;
-            padding: 9px 18px;
-            font-weight: bold;
-            font-size: 13px;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 18px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
             transition: all 0.2s;
             border: none;
             cursor: pointer;
+            flex-shrink: 0;
         }
-        .share-btn:active { transform: scale(0.95); }
+        .share-btn:active { transform: scale(0.92); }
 
         .skip-btn {
             background: rgba(255,255,255,0.07);
@@ -142,6 +152,30 @@
             cursor: pointer;
         }
         .skip-btn:active { transform: scale(0.95); color: white; }
+
+        @keyframes timerPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+        .timer-urgent { animation: timerPulse 0.65s ease-in-out infinite; }
+        .timer-critical { animation: timerPulse 0.3s ease-in-out infinite; }
+
+        @keyframes ttFlash {
+            0%   { opacity: 1; transform: scale(1); }
+            60%  { opacity: 1; transform: scale(1.04); }
+            100% { opacity: 0; transform: scale(1.08); }
+        }
+
+        @keyframes cardSwipeOut {
+            from { transform: translateX(0) rotate(0deg); opacity: 1; }
+            to   { transform: translateX(-120%) rotate(-8deg); opacity: 0; }
+        }
+        @keyframes cardSwipeIn {
+            from { transform: translateX(120%) rotate(6deg); opacity: 0; }
+            to   { transform: translateX(0) rotate(0deg); opacity: 1; }
+        }
+        .card-swipe-out { animation: cardSwipeOut 0.28s ease-in forwards; }
+        .card-swipe-in  { animation: cardSwipeIn 0.32s ease-out forwards; }
     </style>
 </head>
 
@@ -172,95 +206,89 @@
                 המשחק ששבר לדייטים את הקרח
             </p>
 
+            <!-- Mini game mode icons -->
+            <div class="flex items-center gap-4 mb-8">
+                <div class="flex flex-col items-center gap-1 opacity-70">
+                    <span class="text-2xl">🃏</span>
+                    <span class="text-[10px] text-white/50">שאלות</span>
+                </div>
+                <i class="fa-solid fa-arrow-left text-white/20 text-xs"></i>
+                <div class="flex flex-col items-center gap-1 opacity-70">
+                    <span class="text-2xl">🎲</span>
+                    <span class="text-[10px] text-white/50">אתגרים</span>
+                </div>
+                <i class="fa-solid fa-arrow-left text-white/20 text-xs"></i>
+                <div class="flex flex-col items-center gap-1 opacity-70">
+                    <span class="text-2xl">⏱</span>
+                    <span class="text-[10px] text-white/50">משחקים</span>
+                </div>
+            </div>
+
             <button onclick="enterLobby()"
-                class="group relative px-10 py-5 bg-gradient-to-r from-brand-neonPink to-brand-purple rounded-full shadow-[0_0_30px_rgba(255,0,255,0.4)] transition-all active:scale-95 hover:shadow-[0_0_50px_rgba(255,0,255,0.6)]">
+                class="group relative px-10 py-5 bg-gradient-to-r from-brand-neonPink to-brand-purple rounded-full shadow-[0_0_30px_rgba(255,0,255,0.4)] transition-all active:scale-95 hover:shadow-[0_0_50px_rgba(255,0,255,0.6)]" style="animation:timerPulse 2.5s ease-in-out infinite;">
                 <div class="absolute inset-0 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors"></div>
                 <span class="relative text-white font-black text-2xl tracking-wider flex items-center gap-3">
                     שחק אותה <i class="fa-solid fa-heart text-white animate-pulse"></i>
                 </span>
             </button>
-            <div class="mt-8 flex flex-col items-center gap-2">
+
+            <!-- Social proof -->
+            <p class="mt-5 text-white/30 text-xs">❤️ כבר אלפי זוגות שיחקו</p>
+
+            <div class="mt-4 flex flex-col items-center gap-2">
                 <p class="text-white/40 text-xs tracking-widest uppercase">Premium Dating Experience Powered By</p>
                 <a href="https://gilt73.github.io/GT-AI-Studio/" target="_blank"
                     class="flex items-center gap-2 group opacity-60 hover:opacity-100 transition-opacity">
                     <img src="GT_logo.png" alt="G.T AI Studio" class="h-6 w-auto object-contain">
                     <span class="text-white/80 text-sm font-bold tracking-wider group-hover:text-brand-neonBlue transition-colors">G.T AI Studio</span>
                 </a>
-                <p class="text-white/20 text-[10px] mt-1 tracking-wider font-mono">v<span id="app-version">1.0.10</span> 2026 &copy;</p>
+                <p class="text-white/20 text-[10px] mt-1 tracking-wider font-mono">v<span id="app-version">2.0.0</span> 2026 &copy;</p>
             </div>
         </div>
     </div>
 
-    <!-- SETUP / PERSONALIZATION SCREEN -->
-    <div id="setup-screen" class="screen w-full h-full flex flex-col items-center justify-center p-6 hidden" style="background: linear-gradient(135deg, #050510 0%, #0d0d1f 100%);">
-        <div class="w-full max-w-sm">
-            <!-- Header -->
-            <div class="text-center mb-8">
-                <div class="text-4xl mb-3">💑</div>
-                <h2 class="text-2xl font-black text-neon-blue mb-1">קצת עלינו</h2>
-                <p class="text-white/35 text-sm">נתאים את המשחק במיוחד לשניכם</p>
-            </div>
-
-            <!-- Name inputs -->
-            <div class="glass rounded-2xl p-5 mb-4 space-y-4" style="border:1px solid rgba(0,243,255,0.15)">
-                <div>
-                    <label class="text-white/40 text-xs block mb-2">השם שלך</label>
-                    <input id="my-name-input" type="text" maxlength="20" placeholder="למשל: גיל"
-                        style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:white;border-radius:10px;padding:10px 14px;width:100%;font-family:'Heebo',sans-serif;font-size:15px;outline:none;"
-                        oninput="this.style.borderColor='#00f3ff'">
-                </div>
-                <div>
-                    <label class="text-white/40 text-xs block mb-2">שם הפרטנר\ית</label>
-                    <input id="partner-name-input" type="text" maxlength="20" placeholder="למשל: יעל"
-                        style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:white;border-radius:10px;padding:10px 14px;width:100%;font-family:'Heebo',sans-serif;font-size:15px;outline:none;"
-                        oninput="this.style.borderColor='#ff00ff'">
-                </div>
-            </div>
-
-            <!-- Meeting place -->
-            <div class="glass rounded-2xl p-5 mb-6" style="border:1px solid rgba(255,255,255,0.08)">
-                <label class="text-white/40 text-xs block mb-3">איפה נפגשתם?</label>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="selectMeeting(this,'אפליקציה')" class="meeting-pill text-sm py-2 px-3 rounded-full border border-white/20 text-white/50 transition-all">📱 אפליקציה</button>
-                    <button onclick="selectMeeting(this,'דרך חברים')" class="meeting-pill text-sm py-2 px-3 rounded-full border border-white/20 text-white/50 transition-all">👥 דרך חברים</button>
-                    <button onclick="selectMeeting(this,'בעבודה')" class="meeting-pill text-sm py-2 px-3 rounded-full border border-white/20 text-white/50 transition-all">💼 בעבודה</button>
-                    <button onclick="selectMeeting(this,'במסיבה')" class="meeting-pill text-sm py-2 px-3 rounded-full border border-white/20 text-white/50 transition-all">🎉 במסיבה</button>
-                </div>
-            </div>
-
-            <!-- Actions -->
-            <button onclick="confirmSetup()"
-                class="w-full py-4 rounded-2xl font-black text-lg text-black mb-3 transition-all active:scale-95"
-                style="background:linear-gradient(135deg,#00f3ff,#9d00ff);box-shadow:0 0 25px rgba(0,243,255,0.35);">
-                קדימה! 💫
-            </button>
-            <button onclick="skipSetup()" class="w-full text-white/30 text-sm py-2 hover:text-white/60 transition-colors">
-                דלג — שחק בלי התאמה אישית ›
-            </button>
-        </div>
-    </div>
+    <!-- Setup screen kept as hidden placeholder for compatibility -->
+    <div id="setup-screen" class="hidden"></div>
 
     <!-- MAIN LOBBY -->
     <div id="home-screen" class="screen w-full h-full flex flex-col p-6 overflow-y-auto hidden">
         <!-- Background Overlay -->
         <div class="fixed inset-0 -z-10 pointer-events-none" style="background: radial-gradient(circle at 50% 20%, rgba(255, 150, 50, 0.15), transparent 70%), linear-gradient(to bottom, #1a1a2e, #0f0f1a);"></div>
 
-        <div class="flex flex-col items-center justify-center mt-10 mb-5">
+        <div class="flex flex-col items-center justify-center mt-10 mb-3">
             <h1 class="text-6xl font-black text-brand-neonBlue drop-shadow-[0_0_10px_rgba(0,243,255,0.4)]">דייט</h1>
             <span class="text-xl font-light text-brand-amber my-1" style="font-family: 'Outfit', sans-serif;">OR</span>
             <h1 class="text-6xl font-black text-brand-neonPink drop-shadow-[0_0_10px_rgba(255,0,255,0.4)]">חובה</h1>
         </div>
 
+        <!-- Personalization Banner -->
+        <div id="personalization-banner"
+            class="mx-auto w-full max-w-xs mb-3 px-4 py-2 rounded-xl flex items-center justify-between gap-2"
+            style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);">
+            <span class="text-white/40 text-xs">✨ הוסיפו שמות לקלפים מותאמים אישית</span>
+            <button onclick="openPersonalizationModal()" class="text-brand-neonBlue text-xs font-bold">הוסף ←</button>
+        </div>
+
         <!-- Level Selector -->
-        <div class="flex justify-center mb-3">
+        <div class="flex justify-center mb-1">
             <div class="bg-black/40 p-1 rounded-full flex items-center w-full max-w-xs border border-white/10 backdrop-blur-md">
                 <button onclick="setLevel('spicy', this)" data-level="spicy"
-                    class="level-btn flex-1 py-2 text-sm font-bold text-white/40 transition-all rounded-full hover:text-white/70">Spicy</button>
+                    class="level-btn flex-1 py-2 text-xs font-bold text-white/40 transition-all rounded-full hover:text-white/70 flex flex-col items-center leading-none gap-0.5">
+                    <span>🔥🔥🔥</span><span>Spicy</span>
+                </button>
                 <button onclick="setLevel('couple', this)" data-level="couple"
-                    class="level-btn flex-1 py-2 text-sm font-bold text-white/40 transition-all rounded-full hover:text-white/70">Couple</button>
+                    class="level-btn flex-1 py-2 text-xs font-bold text-white/40 transition-all rounded-full hover:text-white/70 flex flex-col items-center leading-none gap-0.5">
+                    <span>🔥🔥</span><span>Couple</span>
+                </button>
                 <button onclick="setLevel('date', this)" data-level="date"
-                    class="level-btn flex-1 py-2 text-sm font-bold active-pill rounded-full transition-all text-black">Date</button>
+                    class="level-btn flex-1 py-2 text-xs font-bold active-pill rounded-full transition-all text-black flex flex-col items-center leading-none gap-0.5">
+                    <span>🔥</span><span>Date</span>
+                </button>
             </div>
+        </div>
+        <!-- Level description -->
+        <div id="level-desc" class="text-center mb-3">
+            <p class="text-white/30 text-[10px]">מושלם לדייט ראשון — שאלות פתוחות ומשחקיות</p>
         </div>
 
         <!-- Gender Selector -->
@@ -277,14 +305,20 @@
 
         <div class="flex flex-col gap-4 max-w-sm mx-auto w-full">
             <button onclick="openGame('cards')"
-                class="glass p-6 rounded-[2rem] flex items-center justify-between group active:scale-95 transition-transform hover:border-brand-neonBlue/50">
+                class="glass p-6 rounded-[2rem] flex items-center justify-between group active:scale-95 transition-transform hover:border-brand-neonBlue/50 relative overflow-hidden"
+                style="border:1px solid rgba(0,243,255,0.25);">
+                <!-- Start Here glow strip -->
+                <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-brand-neonBlue to-transparent opacity-80"></div>
                 <div class="flex items-center gap-4 text-right">
                     <div class="w-12 h-12 rounded-2xl bg-brand-neonBlue/10 flex items-center justify-center text-brand-neonBlue shadow-[0_0_15px_rgba(0,243,255,0.2)]">
                         <i class="fa-solid fa-layer-group text-xl"></i>
                     </div>
                     <div>
-                        <h3 class="text-lg font-bold text-white">קלפי השאלות</h3>
-                        <p class="text-xs text-brand-amber/80">Classic Deck</p>
+                        <div class="flex items-center gap-2 mb-0.5">
+                            <h3 class="text-lg font-bold text-white">קלפי השאלות</h3>
+                            <span class="text-[10px] font-black px-2 py-0.5 rounded-full text-black" style="background:linear-gradient(90deg,#00f3ff,#9d00ff);">התחל כאן ✦</span>
+                        </div>
+                        <p class="text-xs text-brand-amber/80">שאלות ואתגרים שמעמיקים את הקשר</p>
                     </div>
                 </div>
                 <i class="fa-solid fa-chevron-left text-white/20 group-hover:text-white/60 transition-colors"></i>
@@ -292,28 +326,33 @@
 
             <div class="grid grid-cols-3 gap-3">
                 <button onclick="openGame('timer')"
-                    class="glass aspect-square rounded-[1.5rem] flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform hover:border-purple-400/50">
+                    class="glass aspect-square rounded-[1.5rem] flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform hover:border-purple-400/50 p-2">
                     <i class="fa-solid fa-hourglass-start text-purple-400 text-xl drop-shadow-[0_0_8px_rgba(192,132,252,0.5)]"></i>
                     <span class="text-[11px] font-bold text-white/60">Timer</span>
+                    <span class="text-[9px] text-white/30 text-center leading-tight">משימות בזמן</span>
                 </button>
                 <button onclick="openGame('dice')"
                     class="glass aspect-square rounded-[1.5rem] flex items-center justify-center active:scale-95 transition-transform hover:border-brand-amber/50 overflow-hidden p-0 relative group">
                     <img src="CubeMaster.webp?v=1.0.4" alt="Dice"
                         class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    <i class="fa-solid fa-play absolute bottom-3 right-3 text-white/80 text-xs drop-shadow-md"></i>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                    <span class="absolute bottom-2 inset-x-0 text-center text-[9px] text-white/70 font-bold leading-tight px-1">קוביית<br>הגורל</span>
                 </button>
                 <button onclick="openGame('thisthat')"
-                    class="glass aspect-square rounded-[1.5rem] flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform hover:border-brand-neonPink/50">
+                    class="glass aspect-square rounded-[1.5rem] flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform hover:border-brand-neonPink/50 p-2">
                     <i class="fa-solid fa-scale-balanced text-brand-neonPink text-xl drop-shadow-[0_0_8px_rgba(255,0,255,0.5)]"></i>
                     <span class="text-[11px] font-bold text-white/60">This/That</span>
+                    <span class="text-[9px] text-white/30 text-center leading-tight">בחר צד</span>
                 </button>
             </div>
 
             <button onclick="openGame('lotto')"
                 class="glass w-full p-4 rounded-2xl flex items-center justify-center gap-3 opacity-80 active:scale-95 transition-transform hover:opacity-100 border border-brand-neonBlue/20">
                 <i class="fa-solid fa-hand-sparkles text-brand-neonBlue"></i>
-                <span class="text-xs font-bold text-white">לוטו מגע (🎰 בונוס)</span>
+                <div class="flex flex-col items-start">
+                    <span class="text-xs font-bold text-white">לוטו מגע (🎰 בונוס)</span>
+                    <span class="text-[9px] text-white/30">גלגל שילוב מגע אקראי</span>
+                </div>
             </button>
         </div>
     </div>
@@ -337,12 +376,20 @@
         <div id="dice-result"
             class="mt-4 glass p-6 rounded-2xl w-full max-w-xs text-center opacity-0 transition-opacity border border-brand-neonBlue/30">
             <p id="dice-text" class="text-lg font-bold text-brand-neonBlue drop-shadow-[0_0_5px_rgba(0,243,255,0.8)]"></p>
-            <div id="dice-actions" class="mt-4 flex justify-center gap-3 hidden">
-                <button onclick="shareWhatsApp(document.getElementById('dice-text').innerText)" class="share-btn">
-                    <i class="fa-brands fa-whatsapp"></i> שתף
+            <div id="dice-actions" class="mt-4 flex justify-center items-center gap-3 hidden">
+                <button onclick="shareWhatsApp(document.getElementById('dice-text').innerText)" class="share-btn" title="שתף בוואטסאפ">
+                    <i class="fa-brands fa-whatsapp"></i>
                 </button>
                 <button onclick="rollDice()" class="skip-btn">
                     <i class="fa-solid fa-forward"></i> דלג
+                </button>
+            </div>
+            <div id="dice-post-actions" class="mt-4 flex justify-center gap-3 hidden" style="animation: slideUp 0.4s ease-out;">
+                <button onclick="rollDice()" class="flex-1 py-3 rounded-xl font-bold text-sm text-black active:scale-95 transition-transform" style="background:linear-gradient(135deg,#00f3ff,#9d00ff);">
+                    🎲 נסה שוב
+                </button>
+                <button onclick="goHome()" class="flex-1 py-3 rounded-xl font-bold text-sm active:scale-95 transition-transform" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);">
+                    חזור הביתה
                 </button>
             </div>
         </div>
@@ -360,9 +407,9 @@
             <p id="card-content" class="text-2xl font-bold leading-relaxed text-white drop-shadow-md"></p>
             <div class="absolute bottom-10 text-[10px] text-brand-neonBlue font-bold animate-pulse tracking-widest">TAP FOR NEXT CARD</div>
         </div>
-        <div class="mt-5 flex justify-center gap-3">
-            <button onclick="shareWhatsApp(document.getElementById('card-content').innerText)" class="share-btn">
-                <i class="fa-brands fa-whatsapp"></i> שתף
+        <div class="mt-5 flex justify-center items-center gap-3">
+            <button onclick="shareWhatsApp(document.getElementById('card-content').innerText)" class="share-btn" title="שתף בוואטסאפ">
+                <i class="fa-brands fa-whatsapp"></i>
             </button>
             <button onclick="nextCard()" class="skip-btn">
                 <i class="fa-solid fa-forward"></i> דלג
@@ -376,7 +423,7 @@
             class="absolute top-10 right-6 w-10 h-10 glass rounded-full flex items-center justify-center z-[60] bg-black/50 hover:bg-black/70">
             <i class="fa-solid fa-xmark text-white"></i>
         </button>
-        <div onclick="nextThisThat()" id="tt-1"
+        <div onclick="selectThisThat(this)" id="tt-1"
             class="flex-1 relative flex items-center justify-center bg-cover bg-center transition-all duration-700 group cursor-pointer">
             <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
             <h2 class="relative text-4xl font-black px-6 text-center text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] transform group-hover:scale-110 transition-transform duration-500"></h2>
@@ -384,7 +431,7 @@
         <div class="h-16 flex items-center justify-center z-10 bg-[#0f0f1a] border-y border-white/10 relative">
             <div class="w-14 h-14 rounded-full bg-white text-black font-black flex items-center justify-center text-xl shadow-[0_0_20px_rgba(255,255,255,0.3)] z-20 absolute">VS</div>
         </div>
-        <div onclick="nextThisThat()" id="tt-2"
+        <div onclick="selectThisThat(this)" id="tt-2"
             class="flex-1 relative flex items-center justify-center bg-cover bg-center transition-all duration-700 group cursor-pointer">
             <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
             <h2 class="relative text-4xl font-black px-6 text-center text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] transform group-hover:scale-110 transition-transform duration-500"></h2>
@@ -439,9 +486,144 @@
         </div>
         <button onclick="spinLotto()"
             class="w-full max-w-xs py-5 bg-gradient-to-r from-white to-gray-200 text-brand-deep font-black rounded-2xl shadow-xl hover:scale-105 transition-transform">סובב לוטו</button>
+        <div id="lotto-post-actions" class="mt-5 flex gap-3 w-full max-w-xs hidden" style="animation: slideUp 0.4s ease-out;">
+            <button onclick="spinLotto()" class="flex-1 py-3 rounded-xl font-bold text-sm text-black active:scale-95 transition-transform" style="background:linear-gradient(135deg,#00f3ff,#9d00ff);">
+                🎰 סובב שוב
+            </button>
+            <button onclick="goHome()" class="flex-1 py-3 rounded-xl font-bold text-sm active:scale-95 transition-transform" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);">
+                חזור הביתה
+            </button>
+        </div>
+    </div>
+
+    <!-- PWA INSTALL PROMPT -->
+    <div id="pwa-prompt" class="hidden fixed bottom-0 left-0 right-0 z-[250] p-4 flex justify-center" style="animation:slideUp 0.4s ease-out;">
+        <div class="w-full max-w-sm glass rounded-2xl p-4 flex items-center gap-4" style="border:1px solid rgba(0,243,255,0.2);background:rgba(5,5,20,0.95);">
+            <div class="w-12 h-12 rounded-2xl bg-brand-neonBlue/10 flex items-center justify-center flex-shrink-0">
+                <i class="fa-solid fa-bolt text-brand-neonBlue text-xl"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-white font-bold text-sm">גישה מהירה מהמסך הבית ⚡</p>
+                <p class="text-white/40 text-xs">שמרו את המשחק על הטלפון</p>
+            </div>
+            <div class="flex gap-2 flex-shrink-0">
+                <button id="pwa-install-btn" onclick="installPWA()" class="px-3 py-2 rounded-xl text-black font-bold text-xs active:scale-95 transition-transform" style="background:linear-gradient(135deg,#00f3ff,#9d00ff);">התקן</button>
+                <button onclick="dismissPWA()" class="px-3 py-2 rounded-xl text-white/40 text-xs" style="background:rgba(255,255,255,0.07);">✕</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MILESTONE OVERLAY -->
+    <div id="milestone-overlay" class="hidden fixed inset-0 z-[300] flex items-center justify-center p-6" style="background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);">
+        <div class="text-center max-w-xs" style="animation:slideUp 0.4s ease-out;">
+            <div id="milestone-emoji" class="text-7xl mb-4"></div>
+            <h2 class="text-2xl font-black text-brand-neonBlue mb-2" id="milestone-title"></h2>
+            <p class="text-white/60 text-sm mb-8" id="milestone-text"></p>
+            <button onclick="closeMilestone()" class="w-full py-4 rounded-2xl font-black text-black text-lg active:scale-95 transition-transform" style="background:linear-gradient(135deg,#00f3ff,#9d00ff);">
+                המשך לשחק 🎮
+            </button>
+        </div>
+    </div>
+
+    <!-- DECK FINISHED OVERLAY -->
+    <div id="deck-finished-overlay" class="hidden fixed inset-0 z-[300] flex items-center justify-center p-6" style="background:rgba(0,0,0,0.9);backdrop-filter:blur(8px);">
+        <div class="text-center max-w-xs" style="animation:slideUp 0.4s ease-out;">
+            <div class="text-7xl mb-4">🎉</div>
+            <h2 class="text-2xl font-black text-brand-amber mb-2">סיימתם את הקלפים!</h2>
+            <p class="text-white/50 text-sm mb-8">עברתם על כל הקלפים ברמה הזו — אתם מדהימים!</p>
+            <div class="flex flex-col gap-3">
+                <button onclick="replayCards()" class="w-full py-3 rounded-2xl font-black text-black active:scale-95 transition-transform" style="background:linear-gradient(135deg,#00f3ff,#9d00ff);">
+                    🔄 שחקו שוב מההתחלה
+                </button>
+                <button onclick="closeDeckFinished(); goHome()" class="w-full py-3 rounded-2xl font-bold text-white/70 active:scale-95 transition-transform" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);">
+                    נסו משחק אחר
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PERSONALIZATION MODAL -->
+    <div id="personalization-modal" class="hidden fixed inset-0 z-[200] flex items-end justify-center" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);" onclick="if(event.target===this)closePersonalizationModal()">
+        <div class="w-full max-w-sm bg-[#0d0d1f] rounded-t-3xl p-6 pb-10" style="border-top:1px solid rgba(0,243,255,0.15);">
+            <div class="w-10 h-1 bg-white/20 rounded-full mx-auto mb-5"></div>
+            <div class="text-center mb-5">
+                <div class="text-3xl mb-2">💑</div>
+                <h2 class="text-xl font-black text-neon-blue mb-1">קצת עלינו</h2>
+                <p class="text-white/35 text-xs">נתאים את המשחק במיוחד לשניכם</p>
+            </div>
+            <div class="glass rounded-2xl p-4 mb-4 space-y-3" style="border:1px solid rgba(0,243,255,0.15)">
+                <div>
+                    <label class="text-white/40 text-xs block mb-1">השם שלך</label>
+                    <input id="my-name-input" type="text" maxlength="20" placeholder="למשל: גיל"
+                        style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:white;border-radius:10px;padding:9px 14px;width:100%;font-family:'Heebo',sans-serif;font-size:15px;outline:none;"
+                        oninput="this.style.borderColor='#00f3ff'">
+                </div>
+                <div>
+                    <label class="text-white/40 text-xs block mb-1">שם הפרטנר\ית</label>
+                    <input id="partner-name-input" type="text" maxlength="20" placeholder="למשל: יעל"
+                        style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:white;border-radius:10px;padding:9px 14px;width:100%;font-family:'Heebo',sans-serif;font-size:15px;outline:none;"
+                        oninput="this.style.borderColor='#ff00ff'">
+                </div>
+            </div>
+            <div class="glass rounded-2xl p-4 mb-5" style="border:1px solid rgba(255,255,255,0.08)">
+                <label class="text-white/40 text-xs block mb-2">איפה נפגשתם?</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="selectMeeting(this,'אפליקציה')" class="meeting-pill text-sm py-2 px-3 rounded-full border border-white/20 text-white/50 transition-all">📱 אפליקציה</button>
+                    <button onclick="selectMeeting(this,'דרך חברים')" class="meeting-pill text-sm py-2 px-3 rounded-full border border-white/20 text-white/50 transition-all">👥 דרך חברים</button>
+                    <button onclick="selectMeeting(this,'בעבודה')" class="meeting-pill text-sm py-2 px-3 rounded-full border border-white/20 text-white/50 transition-all">💼 בעבודה</button>
+                    <button onclick="selectMeeting(this,'במסיבה')" class="meeting-pill text-sm py-2 px-3 rounded-full border border-white/20 text-white/50 transition-all">🎉 במסיבה</button>
+                </div>
+            </div>
+            <button onclick="confirmSetup()"
+                class="w-full py-4 rounded-2xl font-black text-lg text-black mb-3 transition-all active:scale-95"
+                style="background:linear-gradient(135deg,#00f3ff,#9d00ff);box-shadow:0 0 25px rgba(0,243,255,0.35);">
+                שמור 💫
+            </button>
+            <button onclick="skipSetup()" class="w-full text-white/30 text-sm py-2">
+                סגור ›
+            </button>
+        </div>
     </div>
 
     <script>
+        // ─── PWA Install ─────────────────────────────────────────────
+        let deferredInstallPrompt = null;
+        let firstGamePlayed = false;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredInstallPrompt = e;
+        });
+
+        function maybeShowPWAPrompt() {
+            if (!firstGamePlayed) {
+                firstGamePlayed = true;
+                return; // skip first game
+            }
+            try {
+                if (localStorage.getItem('dof_pwa_dismissed')) return;
+            } catch(e) {}
+            if (deferredInstallPrompt) {
+                setTimeout(() => {
+                    document.getElementById('pwa-prompt').classList.remove('hidden');
+                }, 2000);
+            }
+        }
+
+        function installPWA() {
+            if (!deferredInstallPrompt) return;
+            deferredInstallPrompt.prompt();
+            deferredInstallPrompt.userChoice.then(() => {
+                deferredInstallPrompt = null;
+                document.getElementById('pwa-prompt').classList.add('hidden');
+            });
+        }
+
+        function dismissPWA() {
+            document.getElementById('pwa-prompt').classList.add('hidden');
+            try { localStorage.setItem('dof_pwa_dismissed', '1'); } catch(e) {}
+        }
+
         let gameData = null;
         let currentLevel = 'date';
         let currentGender = 'both';
@@ -546,8 +728,8 @@
             document.querySelectorAll('.level-btn').forEach(b => {
                 const active = b.dataset.level === currentLevel;
                 b.className = active
-                    ? 'level-btn flex-1 py-2 text-sm font-bold active-pill rounded-full transition-all text-black'
-                    : 'level-btn flex-1 py-2 text-sm font-bold text-white/40 transition-all rounded-full hover:text-white/70';
+                    ? 'level-btn flex-1 py-2 text-xs font-bold active-pill rounded-full transition-all text-black flex flex-col items-center leading-none gap-0.5'
+                    : 'level-btn flex-1 py-2 text-xs font-bold text-white/40 transition-all rounded-full hover:text-white/70 flex flex-col items-center leading-none gap-0.5';
             });
             document.querySelectorAll('.gender-btn').forEach(b => {
                 const active = b.dataset.gender === currentGender;
@@ -555,6 +737,8 @@
                     ? 'gender-btn flex-1 py-2 text-sm font-bold active-pill rounded-full transition-all text-black'
                     : 'gender-btn flex-1 py-2 text-sm font-bold text-white/40 transition-all rounded-full hover:text-white/70';
             });
+            const desc = document.getElementById('level-desc');
+            if (desc) desc.querySelector('p').innerText = levelDescs[currentLevel] || '';
         }
 
         // ─── Navigation ──────────────────────────────────────────────
@@ -565,16 +749,14 @@
             landing.style.opacity = '0';
             setTimeout(() => {
                 landing.style.display = 'none';
-                showSetupScreen();
+                goToLobby();
             }, 400);
         }
 
-        // ─── Personalization ─────────────────────────────────────────
-        function showSetupScreen() {
+        function openPersonalizationModal() {
             loadPersonalization();
             document.getElementById('my-name-input').value = myName;
             document.getElementById('partner-name-input').value = partnerName;
-            // restore meeting pill selection
             document.querySelectorAll('.meeting-pill').forEach(p => {
                 if (p.textContent.trim().includes(meetingPlace) && meetingPlace) {
                     p.style.background = 'rgba(0,243,255,0.15)';
@@ -582,9 +764,37 @@
                     p.style.color = '#00f3ff';
                 }
             });
-            const setup = document.getElementById('setup-screen');
-            setup.classList.remove('hidden');
-            setup.classList.add('active');
+            document.getElementById('personalization-modal').classList.remove('hidden');
+            document.getElementById('personalization-modal').style.animation = 'slideUp 0.35s ease-out';
+        }
+
+        function closePersonalizationModal() {
+            document.getElementById('personalization-modal').classList.add('hidden');
+        }
+
+        function confirmPersonalization() {
+            myName = document.getElementById('my-name-input').value.trim();
+            partnerName = document.getElementById('partner-name-input').value.trim();
+            savePersonalization();
+            closePersonalizationModal();
+            updatePersonalizationBanner();
+        }
+
+        // ─── Personalization ─────────────────────────────────────────
+        function showSetupScreen() {
+            openPersonalizationModal();
+        }
+
+        function updatePersonalizationBanner() {
+            const banner = document.getElementById('personalization-banner');
+            if (!banner) return;
+            if (partnerName) {
+                banner.innerHTML = `<span class="text-brand-neonBlue text-xs">💑 משחקים עם <strong>${partnerName}</strong></span><button onclick="openPersonalizationModal()" class="text-white/40 text-xs underline">עריכה</button>`;
+                banner.style.borderColor = 'rgba(0,243,255,0.2)';
+            } else {
+                banner.innerHTML = `<span class="text-white/40 text-xs">✨ הוסיפו שמות לקלפים מותאמים אישית</span><button onclick="openPersonalizationModal()" class="text-brand-neonBlue text-xs font-bold">הוסף ←</button>`;
+                banner.style.borderColor = 'rgba(255,255,255,0.08)';
+            }
         }
 
         function selectMeeting(btn, place) {
@@ -604,23 +814,23 @@
             myName = document.getElementById('my-name-input').value.trim();
             partnerName = document.getElementById('partner-name-input').value.trim();
             savePersonalization();
-            goToLobby();
+            closePersonalizationModal();
+            updatePersonalizationBanner();
         }
 
         function skipSetup() {
-            myName = '';
-            partnerName = '';
-            meetingPlace = '';
-            goToLobby();
+            closePersonalizationModal();
         }
 
         function goToLobby() {
             document.getElementById('setup-screen').classList.remove('active');
             document.getElementById('setup-screen').classList.add('hidden');
+            loadPersonalization();
             const lobby = document.getElementById('home-screen');
             lobby.classList.remove('hidden');
             lobby.classList.add('active');
             applySessionToUI();
+            updatePersonalizationBanner();
         }
 
         function savePersonalization() {
@@ -658,17 +868,28 @@
 
         function goHome() {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('home-screen').classList.add('active');
+            const home = document.getElementById('home-screen');
+            home.classList.add('active', 'returning');
+            setTimeout(() => home.classList.remove('returning'), 400);
             if (timerInterval) clearInterval(timerInterval);
+            maybeShowPWAPrompt();
         }
 
         // ─── Level, Gender, Timer Duration ───────────────────────────
+        const levelDescs = {
+            date:   'מושלם לדייט ראשון — שאלות פתוחות ומשחקיות',
+            couple: 'לזוגות — שאלות אינטימיות שמחזקות קשר',
+            spicy:  'למי שמוכנים — אתגרים חמים ומרגשים 🔞'
+        };
+
         function setLevel(level, btn) {
             currentLevel = level;
             document.querySelectorAll('.level-btn').forEach(b => {
-                b.className = 'level-btn flex-1 py-2 text-sm font-bold text-white/40 transition-all rounded-full hover:text-white/70';
+                b.className = 'level-btn flex-1 py-2 text-xs font-bold text-white/40 transition-all rounded-full hover:text-white/70 flex flex-col items-center leading-none gap-0.5';
             });
-            btn.className = 'level-btn flex-1 py-2 text-sm font-bold active-pill rounded-full transition-all text-black';
+            btn.className = 'level-btn flex-1 py-2 text-xs font-bold active-pill rounded-full transition-all text-black flex flex-col items-center leading-none gap-0.5';
+            const desc = document.getElementById('level-desc');
+            if (desc) desc.querySelector('p').innerText = levelDescs[level] || '';
             spawnSparkles(btn.getBoundingClientRect().left + btn.offsetWidth / 2, btn.getBoundingClientRect().top + btn.offsetHeight / 2, 10);
             playSound('ping');
             saveSession();
@@ -754,6 +975,7 @@
             const resCard = document.getElementById('dice-result');
             const resText = document.getElementById('dice-text');
             const diceActions = document.getElementById('dice-actions');
+            const dicePostActions = document.getElementById('dice-post-actions');
             const cube = document.getElementById('cube');
             const finalRotations = [
                 { x: 0, y: 0 }, { x: 0, y: 180 }, { x: 0, y: 90 },
@@ -765,6 +987,7 @@
             cube.style.transform = `rotateX(${spinX}deg) rotateY(${spinY}deg)`;
             resCard.style.opacity = '0';
             diceActions.classList.add('hidden');
+            dicePostActions.classList.add('hidden');
             playSound('dice');
             setTimeout(() => {
                 const pool = filterByGender(gameData.cube.filter(m => (m.level === currentLevel || m.level === 'all') && (!m.personalized || partnerName)));
@@ -773,24 +996,70 @@
                 resCard.style.opacity = '1';
                 diceActions.classList.remove('hidden');
                 spawnSparkles(window.innerWidth / 2, window.innerHeight / 3, 30);
+                setTimeout(() => dicePostActions.classList.remove('hidden'), 4500);
             }, 2000);
         }
 
         // ─── CARDS ───────────────────────────────────────────────────
+        let cardCount = 0;
+
         function nextCard() {
             if (!gameData) return;
+            const card = document.getElementById('card-display');
             const content = document.getElementById('card-content');
             const label = document.getElementById('card-level-label');
-            const genderLabel = currentGender === 'male' ? ' · ♂' : currentGender === 'female' ? ' · ♀' : '';
-            label.innerText = currentLevel.toUpperCase() + genderLabel;
-            const pool = filterByGender(gameData.cards.filter(c => (c.level === currentLevel || c.level === 'all') && (!c.personalized || partnerName)));
-            const item = getNoRepeat(pool, shownCards);
-            content.innerText = item ? personalizeText(item.content) : 'חסר תוכן ברמה זו';
-            playSound('card');
-            spawnSparkles(window.innerWidth / 2, window.innerHeight / 2, 15);
+
+            // Swipe out animation, then swap content, then swipe in
+            card.classList.add('card-swipe-out');
+            card.style.pointerEvents = 'none';
+
+            setTimeout(() => {
+                card.classList.remove('card-swipe-out');
+                const genderLabel = currentGender === 'male' ? ' · ♂' : currentGender === 'female' ? ' · ♀' : '';
+                label.innerText = currentLevel.toUpperCase() + genderLabel;
+                const pool = filterByGender(gameData.cards.filter(c => (c.level === currentLevel || c.level === 'all') && (!c.personalized || partnerName)));
+                const item = getNoRepeat(pool, shownCards);
+
+                // Deck exhausted?
+                if (!item || (shownCards.size > 0 && shownCards.size >= pool.length && pool.length > 0 && pool.every(c => shownCards.has(c.id)))) {
+                    showDeckFinished();
+                    card.style.pointerEvents = 'auto';
+                    return;
+                }
+
+                content.innerText = personalizeText(item.content);
+                card.classList.add('card-swipe-in');
+                card.style.pointerEvents = 'auto';
+                setTimeout(() => card.classList.remove('card-swipe-in'), 350);
+
+                playSound('card');
+                spawnSparkles(window.innerWidth / 2, window.innerHeight / 2, 15);
+
+                cardCount++;
+                if (cardCount > 0 && cardCount % 10 === 0) {
+                    setTimeout(() => showMilestone(cardCount), 600);
+                }
+            }, 280);
         }
 
         // ─── THIS THAT ───────────────────────────────────────────────
+        function selectThisThat(sideEl) {
+            const bgImage = sideEl.style.backgroundImage;
+            const label = sideEl.querySelector('h2').innerText;
+            const flash = document.createElement('div');
+            flash.style.cssText = `
+                position: fixed; inset: 0; z-index: 200;
+                background-image: ${bgImage};
+                background-size: cover; background-position: center;
+                display: flex; align-items: center; justify-content: center;
+                pointer-events: none;
+                animation: ttFlash 0.55s ease-out forwards;
+            `;
+            flash.innerHTML = `<div style="font-size:72px;filter:drop-shadow(0 0 20px rgba(255,255,255,0.9));">✓</div>`;
+            document.body.appendChild(flash);
+            setTimeout(() => { flash.remove(); nextThisThat(); }, 520);
+        }
+
         function nextThisThat() {
             if (!gameData || !gameData.this_or_that.length) return;
             const item = getNoRepeatTT(gameData.this_or_that);
@@ -814,6 +1083,11 @@
             mission.style.opacity = '1';
             let left = timerDuration;
             display.innerText = left;
+            ring.setAttribute('stroke', '#00f3ff');
+            ring.style.filter = 'drop-shadow(0 0 10px rgba(0,243,255,0.5))';
+            display.style.color = '#00f3ff';
+            display.style.textShadow = '0 0 15px rgba(0,243,255,0.6)';
+            display.classList.remove('timer-urgent', 'timer-critical');
             ring.style.strokeDashoffset = '800';
             btn.disabled = true;
             playSound('ping');
@@ -821,11 +1095,26 @@
                 left--;
                 display.innerText = left;
                 ring.style.strokeDashoffset = 800 - (left / timerDuration * 800);
-                if (left <= 5 && left > 0) playSound('timerTick');
+                if (left <= 10 && left > 5) {
+                    ring.setAttribute('stroke', '#ff4444');
+                    ring.style.filter = 'drop-shadow(0 0 12px rgba(255,68,68,0.8))';
+                    display.style.color = '#ff4444';
+                    display.style.textShadow = '0 0 15px rgba(255,68,68,0.6)';
+                    display.classList.add('timer-urgent');
+                    display.classList.remove('timer-critical');
+                }
+                if (left <= 5 && left > 0) {
+                    display.classList.remove('timer-urgent');
+                    display.classList.add('timer-critical');
+                    playSound('timerTick');
+                }
                 if (left <= 0) {
                     clearInterval(timerInterval);
                     btn.disabled = false;
                     display.innerText = '🔥';
+                    display.classList.remove('timer-urgent', 'timer-critical');
+                    display.style.color = '';
+                    display.style.textShadow = '';
                     playSound('timerDone');
                     spawnSparkles(window.innerWidth / 2, window.innerHeight / 3, 40);
                 }
@@ -834,8 +1123,15 @@
 
         function resetTimer() {
             if (timerInterval) clearInterval(timerInterval);
-            document.getElementById('timer-display').innerText = timerDuration;
-            document.getElementById('timer-ring').style.strokeDashoffset = '800';
+            const display = document.getElementById('timer-display');
+            const ring = document.getElementById('timer-ring');
+            display.innerText = timerDuration;
+            display.classList.remove('timer-urgent', 'timer-critical');
+            display.style.color = '#00f3ff';
+            display.style.textShadow = '0 0 15px rgba(0,243,255,0.6)';
+            ring.setAttribute('stroke', '#00f3ff');
+            ring.style.filter = 'drop-shadow(0 0 10px rgba(0,243,255,0.5))';
+            ring.style.strokeDashoffset = '800';
             document.getElementById('timer-mission').style.opacity = '0';
             document.getElementById('timer-start-btn').disabled = false;
         }
@@ -844,6 +1140,8 @@
         function spinLotto() {
             const s1 = document.getElementById('slot-1');
             const s2 = document.getElementById('slot-2');
+            const postActions = document.getElementById('lotto-post-actions');
+            postActions.classList.add('hidden');
             let i = 0;
             playSound('lotto');
             const interval = setInterval(() => {
@@ -854,8 +1152,48 @@
                     clearInterval(interval);
                     playSound('timerDone');
                     spawnSparkles(window.innerWidth / 2, window.innerHeight / 2, 40);
+                    setTimeout(() => postActions.classList.remove('hidden'), 4500);
                 }
             }, 80);
+        }
+
+        // ─── Milestone & Deck Finished ───────────────────────────────
+        const milestones = [
+            { emoji: '🔥', title: '10 קלפים!', text: 'אתם חמים! הדייט הזה הולך מעולה 😏' },
+            { emoji: '⚡', title: '20 קלפים!', text: 'כבר 20 שאלות? הכימיה פה מדברת בעד עצמה 💫' },
+            { emoji: '💎', title: '30 קלפים!', text: 'שלושים! אתם ממש נכנסים לעומק — כל הכבוד 🌟' },
+            { emoji: '👑', title: '40 קלפים!', text: 'אלופים של הדייט! אולי כבר תזמינו דייט שני? 😄' },
+        ];
+
+        function showMilestone(count) {
+            const idx = Math.min(Math.floor(count / 10) - 1, milestones.length - 1);
+            const m = milestones[idx] || milestones[milestones.length - 1];
+            document.getElementById('milestone-emoji').innerText = m.emoji;
+            document.getElementById('milestone-title').innerText = m.title;
+            document.getElementById('milestone-text').innerText = m.text;
+            document.getElementById('milestone-overlay').classList.remove('hidden');
+            spawnSparkles(window.innerWidth / 2, window.innerHeight / 2, 50);
+            playSound('timerDone');
+        }
+
+        function closeMilestone() {
+            document.getElementById('milestone-overlay').classList.add('hidden');
+        }
+
+        function showDeckFinished() {
+            document.getElementById('deck-finished-overlay').classList.remove('hidden');
+            spawnSparkles(window.innerWidth / 2, window.innerHeight / 2, 60);
+            playSound('timerDone');
+        }
+
+        function closeDeckFinished() {
+            document.getElementById('deck-finished-overlay').classList.add('hidden');
+        }
+
+        function replayCards() {
+            shownCards.clear();
+            closeDeckFinished();
+            nextCard();
         }
 
         // ─── Utilities ───────────────────────────────────────────────
